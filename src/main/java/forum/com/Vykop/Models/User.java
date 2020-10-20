@@ -13,10 +13,12 @@ import javax.persistence.GenerationType;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
     private String username;
     private String password;
     private Date registration_date;
+
+    public User(){};
 
     public User(int id, String username, String password, Date registration_date) {
         this.id = id;
