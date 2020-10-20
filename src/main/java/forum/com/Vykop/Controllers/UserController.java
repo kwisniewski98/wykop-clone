@@ -1,8 +1,5 @@
 package forum.com.Vykop.Controllers;
-
-
 import java.util.List;
-
 import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 class UserController {
 
-    @Autowired
     private final UserRepository repository;
 
-    UserController(UserRepository repository) {
+    UserController(@Qualifier("userRepository")UserRepository repository) {
         this.repository = repository;
     }
-
 
     @GetMapping("/users")
     List<User> all() {
