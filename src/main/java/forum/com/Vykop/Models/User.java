@@ -18,6 +18,16 @@ public class User {
     private String password;
     private Date registration_date;
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    private String role;
+
     public User(){};
 
     public User(int id, String username, String password, Date registration_date) {
