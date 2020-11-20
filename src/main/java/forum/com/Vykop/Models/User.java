@@ -1,5 +1,7 @@
 package forum.com.Vykop.Models;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.*;
 import java.sql.Date;
@@ -17,6 +19,7 @@ public class User {
     private String username;
     private String password;
     private Date registration_date;
+    private static ArrayList<String> roles = new ArrayList<>(Arrays.asList(new String[]{"R", "G", "A"}));
 
     public void setRole(String role) {
         this.role = role;
@@ -67,5 +70,9 @@ public class User {
 
     public void setRegistration_date(Date registration_date) {
         this.registration_date = registration_date;
+    }
+
+    public static ArrayList<String> getRoles() {
+        return roles;
     }
 }
