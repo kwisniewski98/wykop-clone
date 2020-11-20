@@ -1,11 +1,6 @@
 package forum.com.Vykop.Models;
-import java.util.List;
+
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.Objects;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 @Entity
 @Table(name = "admin_list")
 public class Admin_list {

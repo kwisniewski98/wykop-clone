@@ -1,17 +1,11 @@
 package forum.com.Vykop.Controllers;
-import java.util.List;
 
 import forum.com.Vykop.Models.Comment;
-import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Repositories.CommentRepository;
-import forum.com.Vykop.Repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 class CommentController {

@@ -1,16 +1,12 @@
 package forum.com.Vykop.Controllers;
 
 
-
-import java.util.concurrent.atomic.AtomicLong;
-
 import forum.com.Vykop.Models.Greetings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.sql.DataSource;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class GreetingsController {
