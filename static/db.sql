@@ -48,6 +48,20 @@ CREATE TABLE comment (
      votes integer not null,
      foreign key (post) references post(id)
 );
+CREATE TABLE upvoted_comment (
+    id serial primary key ,
+    user_id integer not null ,
+    comment_id integer not null ,
+    constraint fk_user foreign key (user_id) references users(id),
+    constraint fk_comment foreign key (comment_id) references comment(id)
+);
+CREATE TABLE upvoted_post (
+    id serial primary key ,
+    user_id integer not null ,
+    post_id integer not null ,
+    constraint fk_user foreign key (user_id) references users(id),
+    constraint fk_post foreign key (post_id) references post(id)
+);
 insert into users (username, password, role, registration_date) values ('admin', 'password', 'A', '01-01-2000');
 insert into users (username, password, role, registration_date) values ('user1', 'otherPassword', 'R', '01-08-2010');
 insert into users (username, password, role, registration_date) values ('user2', 'nextPassword', 'G', '12-21-2019');
