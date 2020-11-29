@@ -5,15 +5,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Models.UserForm;
 import forum.com.Vykop.Repositories.UserRepository;
+import forum.com.Vykop.Service.PostService;
 import forum.com.Vykop.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 class UserController {
@@ -23,6 +27,9 @@ class UserController {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
+    @Autowired
+    private PostService postService;
+
     UserController(@Qualifier("userRepository")UserRepository repository) {
         this.repository = repository;
     }
@@ -31,23 +38,22 @@ class UserController {
     List<User> all() {
         return repository.findAll();
     }
-    @PostMapping("/users/login")
-    ResponseEntity login(@RequestBody UserForm userForm) throws Exception {
+
+    @RequestMapping(value = "/users/login", method = { RequestMethod.POST },  produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity login(@RequestBody UserForm userForm) throws Exception {
         HttpHeaders headers = new HttpHeaders();
-        try {
-            User user = repository.findByUsername(userForm.getUsername());
-            if (user == null || !user.getPassword().equals(userForm.getPassword()))
-            {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-            String token = tokenProvider.createToken(user, repository.findAll());
-            ObjectMapper mapper = new ObjectMapper();
-            headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-            return ResponseEntity.ok().headers(headers).body(mapper.writeValueAsString(user));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            throw new Exception("Invalid json format");
+        User user = repository.findByUsername(userForm.getUsername());
+        if (user == null || !user.getPassword().equals(userForm.getPassword()))
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        String token = tokenProvider.createToken(user, repository.findAll());
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("user",user);
+        resultMap.put("posts", postService.getPostbyUser(user));
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+        return ResponseEntity.ok().headers(headers).body(resultMap);
     }
 
     @PostMapping("/users")
