@@ -70,7 +70,7 @@ public class JwtTokenProvider {
         return null;
     }
     public String getUser(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJwt(token).getBody().getIssuer();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = myUserDetails.loadUserByUsername(getUser(token));
