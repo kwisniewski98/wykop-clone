@@ -16,16 +16,18 @@ public class DatabaseConfig {
 
     @Bean
     @Primary
-    @ConfigurationProperties(prefix="spring.datasource")
-    public DataSource pgsqlDataSource(){return DataSourceBuilder.create().build();}
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public DataSource pgsqlDataSource() {
+        return DataSourceBuilder.create().build();
+    }
 
     @Bean(name = "pgsqlJdbcTemplate")
-    public JdbcTemplate pgsqljdbcTemplate(@Qualifier("pgsqlDataSource")DataSource pgsqlDataSource){
+    public JdbcTemplate pgsqljdbcTemplate(@Qualifier("pgsqlDataSource") DataSource pgsqlDataSource) {
         return new JdbcTemplate(pgsqlDataSource);
     }
 
     @Bean(name = "pgsqlJdbcTemplateNamed")
-    public NamedParameterJdbcTemplate pgsqljdbcTemplateNamed(@Qualifier("pgsqlDataSource")DataSource pgsqlDataSource){
+    public NamedParameterJdbcTemplate pgsqljdbcTemplateNamed(@Qualifier("pgsqlDataSource") DataSource pgsqlDataSource) {
         return new NamedParameterJdbcTemplate(pgsqlDataSource);
     }
 

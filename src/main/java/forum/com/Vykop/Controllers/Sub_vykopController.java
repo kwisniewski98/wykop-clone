@@ -12,7 +12,7 @@ class Sub_vykopController {
 
     private final Sub_vykopRepository repository;
 
-    Sub_vykopController(@Qualifier("sub_vykopRepository")Sub_vykopRepository repository) {
+    Sub_vykopController(@Qualifier("sub_vykopRepository") Sub_vykopRepository repository) {
         this.repository = repository;
     }
 

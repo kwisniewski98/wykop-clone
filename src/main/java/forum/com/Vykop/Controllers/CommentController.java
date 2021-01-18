@@ -12,7 +12,7 @@ class CommentController {
 
     private final CommentRepository repository;
 
-    CommentController(@Qualifier("commentRepository")CommentRepository repository) {
+    CommentController(@Qualifier("commentRepository") CommentRepository repository) {
         this.repository = repository;
     }
 

@@ -2,21 +2,14 @@ package forum.com.Vykop.Service;
 
 import forum.com.Vykop.Models.Post;
 import forum.com.Vykop.Models.User;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -31,7 +24,7 @@ public class PostService {
     @Qualifier("pgsqlJdbcTemplateNamed")
     private NamedParameterJdbcTemplate pgsqlTemplateNamed;
 
-    public List<Post> getPostbyUser(User user){
+    public List<Post> getPostbyUser(User user) {
         final String CHECK_POST = "SELECT * FROM post WHERE author = :user_id";
         MapSqlParameterSource sqlParam = new MapSqlParameterSource();
         sqlParam.addValue("author", user.getId());

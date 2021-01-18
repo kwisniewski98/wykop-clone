@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtTokenProvider jwtTokenProvider;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/users/login", "/files/**", "/users/signup").permitAll()
@@ -29,10 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
 
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(5);
     }
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {

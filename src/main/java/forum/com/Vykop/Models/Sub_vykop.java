@@ -1,6 +1,7 @@
 package forum.com.Vykop.Models;
 
 import javax.persistence.*;
+
 @Entity
 @Table(name = "sub_vykop")
 public class Sub_vykop {

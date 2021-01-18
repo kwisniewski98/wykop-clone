@@ -1,6 +1,7 @@
 package forum.com.Vykop.Models;
 
 import javax.persistence.*;
+
 @Entity
 @Table(name = "admin_list")
 public class Admin_list {

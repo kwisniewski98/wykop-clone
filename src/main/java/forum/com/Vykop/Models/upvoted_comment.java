@@ -1,7 +1,7 @@
 package forum.com.Vykop.Models;
 
 import javax.persistence.*;
-import java.sql.Date;
+
 @Entity
 @Table(name = "upvoted_comment")
 public class upvoted_comment {

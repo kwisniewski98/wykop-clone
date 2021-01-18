@@ -12,7 +12,7 @@ class Admin_listController {
 
     private final Admin_listRepository repository;
 
-    Admin_listController(@Qualifier("admin_listRepository")Admin_listRepository repository) {
+    Admin_listController(@Qualifier("admin_listRepository") Admin_listRepository repository) {
         this.repository = repository;
     }
 

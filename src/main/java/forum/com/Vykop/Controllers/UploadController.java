@@ -23,7 +23,7 @@ public class UploadController {
 
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename){
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
         HttpHeaders headers = new HttpHeaders();
         Resource resource;
         try {

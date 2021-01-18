@@ -54,7 +54,7 @@ public class JwtTokenProvider {
 
     }
 
-    public boolean validateToken(String jwt)throws Exception {
+    public boolean validateToken(String jwt) throws Exception {
         try {
             Jwts.parser().setSigningKey(secretKey).parse(jwt);
         } catch (JwtException | IllegalArgumentException e) {
@@ -62,20 +62,24 @@ public class JwtTokenProvider {
         }
         return true;
     }
-    public String resolveToken(HttpServletRequest req){
+
+    public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer")) {
             return bearerToken.substring(7);
         }
         return null;
     }
+
     public String getUser(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
+
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = myUserDetails.loadUserByUsername(getUser(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
+
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);

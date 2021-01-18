@@ -12,7 +12,7 @@ class ContentController {
 
     private final ContentRepository repository;
 
-    ContentController(@Qualifier("contentRepository")ContentRepository repository) {
+    ContentController(@Qualifier("contentRepository") ContentRepository repository) {
         this.repository = repository;
     }
 

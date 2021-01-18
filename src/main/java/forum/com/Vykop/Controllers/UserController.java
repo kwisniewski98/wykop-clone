@@ -1,7 +1,5 @@
 package forum.com.Vykop.Controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Models.UserForm;
 import forum.com.Vykop.Repositories.UserRepository;
@@ -16,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 class UserController {
@@ -32,7 +27,7 @@ class UserController {
     @Autowired
     private PostService postService;
 
-    UserController(@Qualifier("userRepository")UserRepository repository) {
+    UserController(@Qualifier("userRepository") UserRepository repository) {
         this.repository = repository;
     }
 
@@ -41,13 +36,12 @@ class UserController {
         return repository.findAll();
     }
 
-    @RequestMapping(value = "/users/login", method = { RequestMethod.POST },  produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/users/login", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity login(@RequestBody UserForm userForm) throws Exception {
         HttpHeaders headers = new HttpHeaders();
         User user = repository.findByUsername(userForm.getUsername());
-        if (user == null || !user.getPassword().equals(userForm.getPassword()))
-        {
+        if (user == null || !user.getPassword().equals(userForm.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String token = tokenProvider.createToken(user, repository.findAll());

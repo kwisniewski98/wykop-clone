@@ -2,6 +2,7 @@ package forum.com.Vykop.Models;
 
 import javax.persistence.*;
 import java.sql.Date;
+
 @Entity
 @Table(name = "post")
 public class Post {

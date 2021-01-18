@@ -8,25 +8,17 @@ import java.util.Arrays;
 @Entity
 @Table(name = "users")
 public class User {
+    private static ArrayList<String> roles = new ArrayList<>(Arrays.asList(new String[]{"user", "admin"}));
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String username;
     private String password;
     private Date registration_date;
-    private static ArrayList<String> roles = new ArrayList<>(Arrays.asList(new String[]{"user", "admin"}));
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
     private String role;
 
-    public User(){};
+    public User() {
+    }
 
     public User(int id, String username, String password, Date registration_date) {
         this.id = id;
@@ -34,11 +26,26 @@ public class User {
         this.password = password;
         this.registration_date = registration_date;
     }
-    public User(int id, String username, String password, Date registration_date, String  role) {
+
+    public User(int id, String username, String password, Date registration_date, String role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.registration_date = registration_date;
+        this.role = role;
+    }
+
+    ;
+
+    public static ArrayList<String> getRoles() {
+        return roles;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -72,9 +79,5 @@ public class User {
 
     public void setRegistration_date(Date registration_date) {
         this.registration_date = registration_date;
-    }
-
-    public static ArrayList<String> getRoles() {
-        return roles;
     }
 }

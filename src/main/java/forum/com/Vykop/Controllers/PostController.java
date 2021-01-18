@@ -12,7 +12,7 @@ class PostController {
 
     private final PostRepository repository;
 
-    PostController(@Qualifier("postRepository")PostRepository repository) {
+    PostController(@Qualifier("postRepository") PostRepository repository) {
         this.repository = repository;
     }
 

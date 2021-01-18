@@ -12,6 +12,7 @@ import java.io.IOException;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
     private JwtTokenProvider jwtTokenProvider;
+
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -25,8 +26,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             SecurityContextHolder.clearContext();
             httpServletResponse.sendError(500, e.getMessage());
             return;
