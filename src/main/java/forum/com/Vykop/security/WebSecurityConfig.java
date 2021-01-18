@@ -24,8 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/users/login").permitAll()
-                .antMatchers("/users/signup").permitAll().antMatchers("/files/**").permitAll().anyRequest().authenticated();
+        http.authorizeRequests().antMatchers("/users/login", "/files/**", "/users/signup").permitAll()
+                .anyRequest().authenticated();
         http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
 
     }

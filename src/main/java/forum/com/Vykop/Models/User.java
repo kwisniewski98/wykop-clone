@@ -14,7 +14,7 @@ public class User {
     private String username;
     private String password;
     private Date registration_date;
-    private static ArrayList<String> roles = new ArrayList<>(Arrays.asList(new String[]{"R", "G", "A"}));
+    private static ArrayList<String> roles = new ArrayList<>(Arrays.asList(new String[]{"user", "admin"}));
 
     public void setRole(String role) {
         this.role = role;
@@ -33,6 +33,13 @@ public class User {
         this.username = username;
         this.password = password;
         this.registration_date = registration_date;
+    }
+    public User(int id, String username, String password, Date registration_date, String  role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.registration_date = registration_date;
+        this.role = role;
     }
 
     public int getId() {

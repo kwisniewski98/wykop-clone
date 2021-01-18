@@ -62,9 +62,9 @@ CREATE TABLE upvoted_post (
     constraint fk_user foreign key (user_id) references users(id),
     constraint fk_post foreign key (post_id) references post(id)
 );
-insert into users (username, password, role, registration_date) values ('admin', 'password', 'A', '01-01-2000');
-insert into users (username, password, role, registration_date) values ('user1', 'otherPassword', 'R', '01-08-2010');
-insert into users (username, password, role, registration_date) values ('user2', 'nextPassword', 'G', '12-21-2019');
+insert into users (username, password, role, registration_date) values ('admin', 'password', 'admin', '01-01-2000');
+insert into users (username, password, role, registration_date) values ('user1', 'otherPassword', 'user', '01-08-2010');
+insert into users (username, password, role, registration_date) values ('user2', 'nextPassword', 'user', '12-21-2019');
 insert into content (text, image, video) values ('Only text', null, null);
 insert into content (text, image, video) values ('Text with img', 'https://marketingprzykawie.pl/wp-content/uploads/2019/08/pepe-the-frog_large.jpg', null);
 insert into content (text, image, video) values ('Text with video', null,'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&fs=1&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0');

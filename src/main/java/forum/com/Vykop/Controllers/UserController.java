@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,11 +51,19 @@ class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String token = tokenProvider.createToken(user, repository.findAll());
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("user",user);
-        resultMap.put("posts", postService.getPostbyUser(user));
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-        return ResponseEntity.ok().headers(headers).body(resultMap);
+        return ResponseEntity.ok().headers(headers).body(user);
+    }
+
+    @RequestMapping(value = "/users/signup", method = {RequestMethod.POST})
+    public String register(@RequestBody UserForm userForm) {
+        User user = new User(0,
+                userForm.getUsername(),
+                userForm.getPassword(),
+                new Date(System.currentTimeMillis()),
+                "user");
+        repository.save(user);
+        return "ok";
     }
 
     @PostMapping("/users")
