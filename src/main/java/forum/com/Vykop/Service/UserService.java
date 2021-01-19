@@ -28,10 +28,6 @@ public class UserService {
         if (userRepository.findByUsername(userForm.getUsername()) != null ) return "username already exists";
         if (userRepository.findByEmail(userForm.getEmail()) != null) return "email already exists";
 
-        if (!userForm.getEmail().matches(emailPattern) ) return "bad email";
-        if (!userForm.getUsername().matches(usernamePattern)) return "bad username";
-        if (!userForm.getPassword().matches(passwordPattern)) return "bad password";
-
         User user = new User(0,
                 userForm.getUsername(),
                 userForm.getPassword(),

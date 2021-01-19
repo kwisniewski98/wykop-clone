@@ -1,8 +1,18 @@
 package forum.com.Vykop.Models;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class UserRegisterForm {
+
+    @NotNull(message = "Username is required")
+    @Size(min = 5, message = "Username must be at least 5 chars long")
     private String username;
+    @NotNull(message = "Password is required")
+    @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&].{8,}")
     private String password;
+    @NotNull(message = "Email is required")
+    @Pattern(regexp="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
     private String email;
     public UserRegisterForm() {
     }

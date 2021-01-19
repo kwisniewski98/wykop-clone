@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,8 +59,9 @@ class UserController {
     }
 
     @RequestMapping(value = "/users/signup", method = {RequestMethod.POST})
-    public String register(@RequestBody UserRegisterForm userForm) {
-        return userService.registerUser(userForm);
+    public ResponseEntity register(@RequestBody @Valid UserRegisterForm userForm) {
+        userService.registerUser(userForm);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/users")
