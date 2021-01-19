@@ -14,9 +14,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
+@CrossOrigin
 class UserController {
 
     private final UserRepository repository;
@@ -46,12 +51,16 @@ class UserController {
         }
         String token = tokenProvider.createToken(user, repository.findAll());
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-        return ResponseEntity.ok().headers(headers).body(user);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("user",user);
+        resultMap.put("token", token);
+        return ResponseEntity.ok().headers(headers).body(resultMap);
     }
 
     @RequestMapping(value = "/users/signup", method = {RequestMethod.POST})
-    public String register(@RequestBody UserRegisterForm userForm) {
-        return userService.registerUser(userForm);
+    public ResponseEntity register(@RequestBody @Valid UserRegisterForm userForm) {
+        userService.registerUser(userForm);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/users")
