@@ -1,6 +1,9 @@
 package forum.com.Vykop.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "content")
@@ -11,6 +14,18 @@ public class Content {
     private String text;
     private String image;
     private String video;
+
+    @OneToOne(fetch = FetchType.LAZY,  cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "content")
+    @JsonIgnore
+    private Post post;
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
 
     public Content() {
     }

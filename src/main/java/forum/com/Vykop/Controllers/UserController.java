@@ -4,7 +4,6 @@ import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Models.UserForm;
 import forum.com.Vykop.Models.UserRegisterForm;
 import forum.com.Vykop.Repositories.UserRepository;
-import forum.com.Vykop.Service.PostService;
 import forum.com.Vykop.Service.UserService;
 import forum.com.Vykop.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -67,7 +65,7 @@ class UserController {
                 .map(user -> {
                     user.setUsername(newUser.getUsername());
                     user.setPassword(newUser.getPassword());
-                    user.setRegistration_date(newUser.getRegistration_date());
+                    user.setRegistrationDate(newUser.getRegistrationDate());
                     return repository.save(user);
                 })
                 .orElseGet(() -> {

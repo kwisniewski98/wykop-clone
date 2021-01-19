@@ -1,7 +1,10 @@
 package forum.com.Vykop.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "post")
@@ -9,22 +12,54 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private Integer author;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "author")
+    private User author;
     private Integer votes;
-    private Integer content;
-    private Date creation_date;
-    private Integer sub_vykopid;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "content")
+    private Content content;
+    private Date creationDate;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "sub_vykopid")
+    @JsonIgnore
+    private SubVykop subVykop;
+
+    @ManyToMany(mappedBy = "upvotedPosts")
+    @JsonIgnore
+    private Set<User> upvotedUsers;
+
+    public Set<User> getUpvotedUsers() {
+        return upvotedUsers;
+    }
+
+    @OneToMany(mappedBy = "post")
+    Set<Comment> comments;
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void setUpvotedUsers(Set<User> upvoted_users) {
+        this.upvotedUsers = upvoted_users;
+    }
 
     public Post() {
     }
 
-    public Post(Integer id, Integer author, Integer votes, Integer content, Date creation_date, Integer sub_vykopid) {
+    public Post(Integer id, User author, Integer votes, Content content, Date creationDate, SubVykop subVykop) {
         this.id = id;
         this.author = author;
         this.votes = votes;
         this.content = content;
-        this.creation_date = creation_date;
-        this.sub_vykopid = sub_vykopid;
+        this.creationDate = creationDate;
+        this.subVykop = subVykop;
     }
 
     public Integer getId() {
@@ -35,11 +70,11 @@ public class Post {
         this.id = id;
     }
 
-    public Integer getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(Integer author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 
@@ -51,27 +86,28 @@ public class Post {
         this.votes = votes;
     }
 
-    public Integer getContent() {
+    public Content getContent() {
         return content;
     }
 
-    public void setContent(Integer content) {
+    public void setContent(Content content) {
         this.content = content;
     }
 
-    public Date getCreation_date() {
-        return creation_date;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(Date creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(Date creation_date) {
+        this.creationDate = creation_date;
     }
 
-    public Integer getSub_vykopid() {
-        return sub_vykopid;
+    public SubVykop getSubVykop() {
+        return subVykop;
     }
 
-    public void setSub_vykopid(Integer sub_vykopid) {
-        this.sub_vykopid = sub_vykopid;
+    public void setSubVykop(SubVykop sub_vykop) {
+        this.subVykop = sub_vykop;
     }
+
 }

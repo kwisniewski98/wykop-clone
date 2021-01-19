@@ -1,23 +1,20 @@
 package forum.com.Vykop.Service;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import forum.com.Vykop.Models.*;
 import forum.com.Vykop.Repositories.*;
-import org.hibernate.boot.model.source.spi.Sortable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.awt.print.Pageable;
+import javax.annotation.PostConstruct;
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Component
@@ -30,10 +27,6 @@ public class PostService {
     @Autowired
     @Qualifier("pgsqlJdbcTemplateNamed")
     private NamedParameterJdbcTemplate pgsqlTemplateNamed;
-
-    @Qualifier("sub_vykop_listRepository")
-    @Autowired
-    private Sub_vykop_listRepository sub_vykop_listRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -53,34 +46,36 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+
+
+
+    @PostConstruct
+    public void init(){
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    }
+
     public List<Post> getPostbyUser(User user) {
         final String CHECK_POST = "SELECT * FROM post WHERE author = :user_id";
         MapSqlParameterSource sqlParam = new MapSqlParameterSource();
         sqlParam.addValue("author", user.getId());
         return pgsqlTemplateNamed.query(CHECK_POST, sqlParam, new BeanPropertyRowMapper<>(Post.class));
     }
-    public List<HashMap<String ,Object>> getFeedPosts(Principal principal) {
-        int userId = userRepository.findByUsername(principal.getName()).getId();
-        List<Post> posts =  postRepository.findByUser(userId);
-        posts = posts.stream().sorted(Comparator.comparing(Post::getCreation_date).reversed())
-                .collect(Collectors.toList());
-        List<HashMap<String, Object>> result = new ArrayList<>();
-        for(Post post : posts){
-            HashMap<String , Object> map = new HashMap<>();
-            Map<String, Object> m = objectMapper.convertValue(post, Map.class);
-            for (Map.Entry<String , Object> entry: m.entrySet()) {
-                map.put(entry.getKey(), entry.getValue());
-            }
-            List<Comment> comments = commentRepository.findByPost(post.getId());
-            Content content = contentRepository.findByPost(post.getId()).orElse( new Content());
-            map.put("comments", comments);
-            map.put("content", content);
-            map.put("author", userRepository.findById(post.getAuthor()));
-            map.remove("sub_vykopid");
-            result.add(map);
-        }
-        return result;
+    public Set<Post> getFeedPosts(Principal principal) {
+        User user = userRepository.findByUsername(principal.getName());
+        Set<Post> posts = new HashSet<>();
+        for (SubVykop subVykop : user.getSubVykopList()) {
+            posts.addAll(subVykop.getPosts());
 
+        }
+        return posts;
+//        List<Integer> subscribedSubVykops = user.getSubVykopList().stream()
+//                .map(x -> x.getId()).collect(Collectors.toList());
+//
+//        final String CHECK_ACCOUNT = "select Post from Post post inner join sub_vykop sv on sv.id = post.sub_vykopid" +
+//                " where sv.id in (:ids)";
+//        MapSqlParameterSource sqlParam = new MapSqlParameterSource();
+//        sqlParam.addValue("ids", subscribedSubVykops);
+//        return pgsqlTemplateNamed.query(CHECK_ACCOUNT, sqlParam, new BeanPropertyRowMapper<>(Post.class));
     }
     /*
 

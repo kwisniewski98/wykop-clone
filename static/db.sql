@@ -54,7 +54,10 @@ CREATE TABLE comment
     post  integer,
     text  text,
     votes integer not null,
-    foreign key (post) references post (id)
+    author integer not null ,
+    foreign key (post) references post (id),
+    foreign key (author) references user (id)
+
 );
 CREATE TABLE upvoted_comment
 (

@@ -3,17 +3,12 @@ package forum.com.Vykop.Controllers;
 import forum.com.Vykop.Models.Post;
 import forum.com.Vykop.Repositories.PostRepository;
 import forum.com.Vykop.Service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpHeaders;
 import java.security.Principal;
-import java.security.Security;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 class PostController {
@@ -40,7 +35,7 @@ class PostController {
     }
 
     @GetMapping("/userposts")
-    List<HashMap<String , Object>> userPosts(Principal principal) {
+    Set<Post> userPosts(Principal principal) {
         return postService.getFeedPosts(principal);
     }
 
@@ -50,8 +45,8 @@ class PostController {
                 .map(Post -> {
                     Post.setAuthor(newPost.getAuthor());
                     Post.setContent(newPost.getContent());
-                    Post.setCreation_date(newPost.getCreation_date());
-                    Post.setSub_vykopid(newPost.getSub_vykopid());
+                    Post.setCreationDate(newPost.getCreationDate());
+                    Post.setSubVykop(newPost.getSubVykop());
                     Post.setVotes(newPost.getVotes());
                     return repository.save(Post);
                 })

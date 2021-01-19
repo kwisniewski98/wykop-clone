@@ -1,6 +1,6 @@
 package forum.com.Vykop.Controllers;
 
-import forum.com.Vykop.Models.Sub_vykop;
+import forum.com.Vykop.Models.SubVykop;
 import forum.com.Vykop.Repositories.Sub_vykopRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +17,17 @@ class Sub_vykopController {
     }
 
     @GetMapping("/sub_vykop")
-    List<Sub_vykop> all() {
+    List<SubVykop> all() {
         return repository.findAll();
     }
 
     @PostMapping("/sub_vykop")
-    Sub_vykop newSub_vykop(@RequestBody Sub_vykop newSub_vykop) {
+    SubVykop newSub_vykop(@RequestBody SubVykop newSub_vykop) {
         return repository.save(newSub_vykop);
     }
 
     @PutMapping("/sub_vykop/{id}")
-    Sub_vykop replaceSub_vykop(@RequestBody Sub_vykop newSub_vykop, @PathVariable int id) {
+    SubVykop replaceSub_vykop(@RequestBody SubVykop newSub_vykop, @PathVariable int id) {
         return repository.findById(id)
                 .map(Sub_vykop -> {
                     Sub_vykop.setDescription(newSub_vykop.getDescription());
