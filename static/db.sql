@@ -43,7 +43,7 @@ CREATE TABLE post
     votes         integer not null,
     content       integer not null,
     creation_date date    not null,
-    sub_vykop_id  integer not null,
+    sub_vykopid  integer not null,
     constraint fk_content foreign key (content) references content (id),
     constraint fk_author foreign key (author) references users (id)
 );
@@ -92,11 +92,11 @@ insert into sub_vykop_list (sub_vykop, user_id)
 values (1, 2);
 insert into sub_vykop_list (sub_vykop, user_id)
 values (1, 3);
-insert into post (author, votes, content, creation_date, sub_vykop_id)
+insert into post (author, votes, content, creation_date, sub_vykopid)
 values (1, 0, 1, '01-01-2020', 1);
-insert into post (author, votes, content, creation_date, sub_vykop_id)
+insert into post (author, votes, content, creation_date, sub_vykopid)
 values (2, 0, 2, '01-01-2020', 1);
-insert into post (author, votes, content, creation_date, sub_vykop_id)
+insert into post (author, votes, content, creation_date, sub_vykopid)
 values (3, 0, 3, '01-01-2020', 1);
 insert into comment (post, text, votes)
 values (1, 'some text', 0);

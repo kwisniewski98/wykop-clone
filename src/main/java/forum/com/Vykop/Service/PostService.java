@@ -1,16 +1,23 @@
 package forum.com.Vykop.Service;
 
-import forum.com.Vykop.Models.Post;
-import forum.com.Vykop.Models.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import forum.com.Vykop.Models.*;
+import forum.com.Vykop.Repositories.*;
+import org.hibernate.boot.model.source.spi.Sortable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.awt.print.Pageable;
+import java.security.Principal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -24,14 +31,57 @@ public class PostService {
     @Qualifier("pgsqlJdbcTemplateNamed")
     private NamedParameterJdbcTemplate pgsqlTemplateNamed;
 
+    @Qualifier("sub_vykop_listRepository")
+    @Autowired
+    private Sub_vykop_listRepository sub_vykop_listRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Qualifier("commentRepository")
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Qualifier("contentRepository")
+    @Autowired
+    private ContentRepository contentRepository;
+
+    @Qualifier("userRepository")
+    @Autowired
+    private UserRepository userRepository;
+    @Qualifier("postRepository")
+    @Autowired
+    private PostRepository postRepository;
+
     public List<Post> getPostbyUser(User user) {
         final String CHECK_POST = "SELECT * FROM post WHERE author = :user_id";
         MapSqlParameterSource sqlParam = new MapSqlParameterSource();
         sqlParam.addValue("author", user.getId());
         return pgsqlTemplateNamed.query(CHECK_POST, sqlParam, new BeanPropertyRowMapper<>(Post.class));
     }
+    public List<HashMap<String ,Object>> getFeedPosts(Principal principal) {
+        int userId = userRepository.findByUsername(principal.getName()).getId();
+        List<Post> posts =  postRepository.findByUser(userId);
+        posts = posts.stream().sorted(Comparator.comparing(Post::getCreation_date).reversed())
+                .collect(Collectors.toList());
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        for(Post post : posts){
+            HashMap<String , Object> map = new HashMap<>();
+            Map<String, Object> m = objectMapper.convertValue(post, Map.class);
+            for (Map.Entry<String , Object> entry: m.entrySet()) {
+                map.put(entry.getKey(), entry.getValue());
+            }
+            List<Comment> comments = commentRepository.findByPost(post.getId());
+            Content content = contentRepository.findByPost(post.getId()).orElse( new Content());
+            map.put("comments", comments);
+            map.put("content", content);
+            map.put("author", userRepository.findById(post.getAuthor()));
+            map.remove("sub_vykopid");
+            result.add(map);
+        }
+        return result;
 
-
+    }
     /*
 
     public Account getAccount(Long user_id){
