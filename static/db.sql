@@ -3,6 +3,7 @@ CREATE TABLE "users"
     id                serial primary key,
     username          text not null check ( length(username) > 4 ),
     password          text not null,
+    email             text not null,
     role              text not null check (role in ('Admin', 'User')),
     registration_date date not null
 );
@@ -71,12 +72,12 @@ CREATE TABLE upvoted_post
     constraint fk_user foreign key (user_id) references users (id),
     constraint fk_post foreign key (post_id) references post (id)
 );
-insert into users (username, password, role, registration_date)
-values ('admin', 'password', 'admin', '01-01-2000');
-insert into users (username, password, role, registration_date)
-values ('user1', 'otherPassword', 'user', '01-08-2010');
-insert into users (username, password, role, registration_date)
-values ('user2', 'nextPassword', 'user', '12-21-2019');
+insert into users (username, password, role, registration_date, email)
+values ('admin', 'password', 'admin', '01-01-2000', 'admin@test.com');
+insert into users (username, password, role, registration_date, email)
+values ('user1', 'otherPassword', 'user', '01-08-2010', 'user1@test.com');
+insert into users (username, password, role, registration_date, email)
+values ('user2', 'nextPassword', 'user', '12-21-2019', 'user2@test.com');
 insert into content (text, image, video)
 values ('Only text', null, null);
 insert into content (text, image, video)
