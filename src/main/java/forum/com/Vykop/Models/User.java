@@ -14,6 +14,7 @@ public class User {
     private Integer id;
     private String username;
     private String password;
+    private String email;
     private Date registration_date;
     private String role;
 
@@ -35,7 +36,14 @@ public class User {
         this.role = role;
     }
 
-    ;
+    public User(Integer id, String username, String password, String email, Date registration_date, String role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.registration_date = registration_date;
+        this.role = role;
+    }
 
     public static ArrayList<String> getRoles() {
         return roles;

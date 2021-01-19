@@ -2,8 +2,10 @@ package forum.com.Vykop.Controllers;
 
 import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Models.UserForm;
+import forum.com.Vykop.Models.UserRegisterForm;
 import forum.com.Vykop.Repositories.UserRepository;
 import forum.com.Vykop.Service.PostService;
+import forum.com.Vykop.Service.UserService;
 import forum.com.Vykop.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +30,7 @@ class UserController {
     private JwtTokenProvider tokenProvider;
 
     @Autowired
-    private PostService postService;
+    private UserService userService;
 
     UserController(@Qualifier("userRepository") UserRepository repository) {
         this.repository = repository;
@@ -56,14 +58,8 @@ class UserController {
     }
 
     @RequestMapping(value = "/users/signup", method = {RequestMethod.POST})
-    public String register(@RequestBody UserForm userForm) {
-        User user = new User(0,
-                userForm.getUsername(),
-                userForm.getPassword(),
-                new Date(System.currentTimeMillis()),
-                "user");
-        repository.save(user);
-        return "ok";
+    public String register(@RequestBody UserRegisterForm userForm) {
+        return userService.registerUser(userForm);
     }
 
     @PostMapping("/users")
