@@ -13,6 +13,7 @@ public class SubVykop {
     private Integer id;
     private String name;
     private String description;
+    private String banner;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "subVykop")
     @JsonIgnore
@@ -40,6 +41,14 @@ public class SubVykop {
 
     public void setAdmins(Set<User> admins) {
         this.admins = admins;
+    }
+
+    public String getBanner() {
+        return banner;
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner;
     }
 
     public SubVykop() {

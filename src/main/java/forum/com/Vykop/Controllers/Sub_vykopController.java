@@ -2,18 +2,40 @@ package forum.com.Vykop.Controllers;
 
 import forum.com.Vykop.Models.SubVykop;
 import forum.com.Vykop.Repositories.Sub_vykopRepository;
+import forum.com.Vykop.Service.SubVykopService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 class Sub_vykopController {
 
     private final Sub_vykopRepository repository;
 
+    @Autowired
+    private SubVykopService subVykopService;
+
     Sub_vykopController(@Qualifier("sub_vykopRepository") Sub_vykopRepository repository) {
         this.repository = repository;
+    }
+    @GetMapping("/sub_vykop/{id}")
+    ResponseEntity getSub_vykop(@PathVariable int id){
+        Optional<SubVykop> subVykop = repository.findById(id);
+        if (subVykop.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        else return ResponseEntity.ok().body(subVykop.get());
+    }
+
+    @PostMapping("/subykop/{id}/banner")
+    ResponseEntity changeBanner(@PathVariable int id, @RequestParam("file") MultipartFile file){
+        String response = subVykopService.uploadBanner(file, id);
+        if (response.equals("subVykop not found")) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/sub_vykop")
@@ -32,6 +54,7 @@ class Sub_vykopController {
                 .map(Sub_vykop -> {
                     Sub_vykop.setDescription(newSub_vykop.getDescription());
                     Sub_vykop.setName(newSub_vykop.getName());
+                    Sub_vykop.setBanner(newSub_vykop.getBanner());
                     return repository.save(Sub_vykop);
                 })
                 .orElseGet(() -> {

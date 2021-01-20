@@ -87,6 +87,7 @@ class UserController {
                     user.setUsername(newUser.getUsername());
                     user.setPassword(newUser.getPassword());
                     user.setRegistrationDate(newUser.getRegistrationDate());
+                    user.setAvatar(newUser.getAvatar());
                     return repository.save(user);
                 })
                 .orElseGet(() -> {

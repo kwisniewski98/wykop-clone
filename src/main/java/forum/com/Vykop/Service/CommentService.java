@@ -29,7 +29,12 @@ public class CommentService {
         }
         Comment c = comment.get();
         if (user.getUpvotedComments().contains(c)) {
-            return "user already upvoted this comment";
+            c.setVotes(c.getVotes()-1);
+            c.getUpvotedUsers().remove(user);
+            user.getUpvotedComments().remove(c);
+            userRepository.save(user);
+            commentRepository.save(c);
+            return "downvote";
         }
 
         c.setVotes(c.getVotes()+1);
@@ -37,6 +42,6 @@ public class CommentService {
         user.getUpvotedComments().add(c);
         userRepository.save(user);
         commentRepository.save(c);
-        return "ok";
+        return "upvote";
     }
 }

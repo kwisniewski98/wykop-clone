@@ -85,14 +85,19 @@ public class PostService {
         }
         Post p = post.get();
         if (user.getUpvotedPosts().contains(p)) {
-            return "user already upvoted this post";
+            p.setVotes(p.getVotes()-1);
+            user.getUpvotedPosts().remove(p);
+            p.getUpvotedUsers().remove(user);
+            userRepository.save(user);
+            postRepository.save(p);
+            return "downvote";
         }
         p.setVotes(p.getVotes()+1);
         user.getUpvotedPosts().add(p);
         p.getUpvotedUsers().add(user);
         userRepository.save(user);
         postRepository.save(p);
-        return "ok";
+        return "upvote";
     }
     /*
 

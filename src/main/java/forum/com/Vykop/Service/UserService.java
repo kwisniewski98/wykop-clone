@@ -45,7 +45,7 @@ public class UserService {
     }
 
     public String uploadAvatar(MultipartFile file, Principal principal){
-        String fileURL = "http://localhost:8080/files" + file.getOriginalFilename();
+        String fileURL = "http://localhost:8080/files/" + file.getOriginalFilename();
         User user = userRepository.findByUsername(principal.getName());
         storageService.store(file);
         user.setAvatar(fileURL);
