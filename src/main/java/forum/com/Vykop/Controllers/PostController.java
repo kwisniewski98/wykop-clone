@@ -3,7 +3,10 @@ package forum.com.Vykop.Controllers;
 import forum.com.Vykop.Models.Post;
 import forum.com.Vykop.Repositories.PostRepository;
 import forum.com.Vykop.Service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -15,8 +18,6 @@ class PostController {
 
     private final PostRepository repository;
     private final PostService postService;
-
-
 
     PostController(@Qualifier("postRepository") PostRepository repository,
                    PostService postService ) {
@@ -37,6 +38,13 @@ class PostController {
     @GetMapping("/userposts")
     Set<Post> userPosts(Principal principal) {
         return postService.getFeedPosts(principal);
+    }
+
+    @GetMapping("/posts/{subvykop}")
+    ResponseEntity subredditPosts(@PathVariable String  subvykop) {
+        Set<Post> posts = repository.findBySubVykop_Name(subvykop);
+        if (posts.size() == 0) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok().body(posts);
     }
 
     @PutMapping("/posts/{id}")

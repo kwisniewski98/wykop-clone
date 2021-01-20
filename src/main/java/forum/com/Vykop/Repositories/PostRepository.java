@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository("postRepository")
 public interface PostRepository extends JpaRepository<Post, Integer> {
-
+    Set<Post> findBySubVykop_Name(String name);
 }
