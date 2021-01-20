@@ -20,6 +20,7 @@ public class User {
     private String email;
     private Date registrationDate;
     private String role;
+    private String avatar;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY,  cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonIgnore
@@ -60,6 +61,14 @@ public class User {
     )
     @JsonIgnore
     Set<Post> upvotedPosts;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getEmail() {
         return email;

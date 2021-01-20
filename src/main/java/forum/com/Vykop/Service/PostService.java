@@ -77,6 +77,23 @@ public class PostService {
 //        sqlParam.addValue("ids", subscribedSubVykops);
 //        return pgsqlTemplateNamed.query(CHECK_ACCOUNT, sqlParam, new BeanPropertyRowMapper<>(Post.class));
     }
+    public String upvote(int postId, Principal principal) {
+        User user = userRepository.findByUsername(principal.getName());
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isEmpty()){
+            return "post not found";
+        }
+        Post p = post.get();
+        if (user.getUpvotedPosts().contains(p)) {
+            return "user already upvoted this post";
+        }
+        p.setVotes(p.getVotes()+1);
+        user.getUpvotedPosts().add(p);
+        p.getUpvotedUsers().add(user);
+        userRepository.save(user);
+        postRepository.save(p);
+        return "ok";
+    }
     /*
 
     public Account getAccount(Long user_id){

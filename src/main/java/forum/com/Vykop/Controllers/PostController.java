@@ -64,6 +64,12 @@ class PostController {
                 });
     }
 
+    @PostMapping("/posts/upvote/{id}")
+    ResponseEntity upvote(@PathVariable int id, Principal principal) {
+        String result = postService.upvote(id, principal);
+        return ResponseEntity.ok().body(result);
+    }
+
     @DeleteMapping("/posts/{id}")
     void deletePost(@PathVariable int id) {
         repository.deleteById(id);

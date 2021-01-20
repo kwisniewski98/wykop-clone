@@ -4,6 +4,7 @@ CREATE TABLE "users"
     username          text not null check ( length(username) > 4 ),
     password          text not null,
     email             text not null,
+    avatar            text not null,
     role              text not null check (role in ('Admin', 'User')),
     registration_date date not null
 );

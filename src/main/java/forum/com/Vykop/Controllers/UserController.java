@@ -5,6 +5,7 @@ import forum.com.Vykop.Models.UserForm;
 import forum.com.Vykop.Models.UserRegisterForm;
 import forum.com.Vykop.Repositories.UserRepository;
 import forum.com.Vykop.Service.UserService;
+import forum.com.Vykop.Storage.StorageService;
 import forum.com.Vykop.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
+import java.security.Principal;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +34,9 @@ class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StorageService storageService;
 
     UserController(@Qualifier("userRepository") UserRepository repository) {
         this.repository = repository;
@@ -62,6 +69,12 @@ class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/users/avatar")
+    public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file,
+                                           Principal principal) {
+        String fileURL = userService.uploadAvatar(file, principal);
+        return ResponseEntity.ok().body(fileURL);
+    }
     @PostMapping("/users")
     User newUser(@RequestBody User newUser) {
         return repository.save(newUser);

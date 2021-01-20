@@ -36,8 +36,8 @@ public class UploadController {
     }
 
     @PostMapping("/file")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file) {
         storageService.store(file);
-        return "ok";
+        return ResponseEntity.ok().body("http://localhost:8080/files/" + file.getOriginalFilename());
     }
 }
