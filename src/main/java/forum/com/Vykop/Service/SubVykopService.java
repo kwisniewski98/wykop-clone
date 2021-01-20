@@ -12,7 +12,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class SubVykopService {
@@ -57,5 +60,9 @@ public class SubVykopService {
         s.getSubcribedList().add(user);
         userRepository.save(user);
         sub_vykopRepository.save(s);
+    }
+    public List<String> subVykopsMatching(String match) {
+        return sub_vykopRepository.findAll().stream().map(SubVykop::getName).filter(
+                x -> x.contains(match)).collect(Collectors.toList());
     }
 }

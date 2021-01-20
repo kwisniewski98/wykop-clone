@@ -74,4 +74,8 @@ class PostController {
     void deletePost(@PathVariable int id) {
         repository.deleteById(id);
     }
+    @GetMapping("/posts/{subVykop}/search")
+    ResponseEntity findSubVykops(@RequestBody String match, @PathVariable String subVykop) {
+        return ResponseEntity.ok().body(postService.postsMatching(match, subVykop));
+    }
 }

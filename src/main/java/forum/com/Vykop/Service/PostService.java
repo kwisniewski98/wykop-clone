@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -65,7 +66,6 @@ public class PostService {
         Set<Post> posts = new HashSet<>();
         for (SubVykop subVykop : user.getSubVykopList()) {
             posts.addAll(subVykop.getPosts());
-
         }
         return posts;
 //        List<Integer> subscribedSubVykops = user.getSubVykopList().stream()
@@ -98,6 +98,11 @@ public class PostService {
         userRepository.save(user);
         postRepository.save(p);
         return "upvote";
+    }
+    public List<String> postsMatching(String match, String subVykop) {
+        return postRepository.findAll().stream().filter(x -> x.getSubVykop().getName().equals(subVykop))
+                .map(Post::getTitle).filter(
+                x -> x.contains(match)).collect(Collectors.toList());
     }
     /*
 

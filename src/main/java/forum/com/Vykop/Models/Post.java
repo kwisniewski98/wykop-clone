@@ -17,6 +17,7 @@ public class Post {
     @JoinColumn(name = "author")
     private User author;
     private Integer votes;
+    private String title;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "content")
@@ -37,6 +38,14 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     Set<Comment> comments;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Set<Comment> getComments() {
         return comments;

@@ -87,4 +87,8 @@ class Sub_vykopController {
     void deleteSub_vykop(@PathVariable int id) {
         repository.deleteById(id);
     }
+    @GetMapping("/sub_vykop/search")
+    ResponseEntity findSubVykops(@RequestBody String match) {
+        return ResponseEntity.ok().body(subVykopService.subVykopsMatching(match));
+    }
 }
