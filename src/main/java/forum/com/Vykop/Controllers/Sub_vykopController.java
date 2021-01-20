@@ -3,6 +3,7 @@ package forum.com.Vykop.Controllers;
 import forum.com.Vykop.Models.SubVykop;
 import forum.com.Vykop.Repositories.Sub_vykopRepository;
 import forum.com.Vykop.Service.SubVykopService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +31,24 @@ class Sub_vykopController {
         Optional<SubVykop> subVykop = repository.findById(id);
         if (subVykop.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         else return ResponseEntity.ok().body(subVykop.get());
+    }
+
+    @GetMapping("/subvykop/{id}/isSubscribed")
+    ResponseEntity isSubscribed(@PathVariable int id, Principal principal){
+        try {
+            return ResponseEntity.ok().body(subVykopService.isSubscribed(principal.getName(), id));
+        }catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @GetMapping("/subvykop/{id}/subscribe")
+    ResponseEntity subscribe(@PathVariable int id, Principal principal){
+        try {
+            subVykopService.subscribe(principal.getName(), id);
+            return ResponseEntity.ok().build();
+        }catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping("/subykop/{id}/banner")

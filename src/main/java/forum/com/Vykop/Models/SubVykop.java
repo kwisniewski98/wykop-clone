@@ -33,7 +33,15 @@ public class SubVykop {
 
     @ManyToMany(mappedBy = "subVykopList")
             @JsonIgnore
-    Set<User> subcribed_list;
+    Set<User> subcribedList;
+
+    public Set<User> getSubcribedList() {
+        return subcribedList;
+    }
+
+    public void setSubcribedList(Set<User> subcribedList) {
+        this.subcribedList = subcribedList;
+    }
 
     public Set<User> getAdmins() {
         return admins;
