@@ -6,6 +6,7 @@ import forum.com.Vykop.Models.*;
 import forum.com.Vykop.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -61,13 +62,32 @@ public class PostService {
         sqlParam.addValue("author", user.getId());
         return pgsqlTemplateNamed.query(CHECK_POST, sqlParam, new BeanPropertyRowMapper<>(Post.class));
     }
-    public Set<Post> getFeedPosts(Principal principal) {
+    public List<Post> getFeedPosts(Principal principal, int page) {
         User user = userRepository.findByUsername(principal.getName());
-        Set<Post> posts = new HashSet<>();
+        List<Post> posts = new ArrayList<>();
         for (SubVykop subVykop : user.getSubVykopList()) {
             posts.addAll(subVykop.getPosts());
         }
-        return posts;
+        posts.sort(Comparator.comparing(Post::getCreationDate));
+        int offset = page * 20;
+        int size = 20;
+        if (offset - size > posts.size() ) {
+            List<Post> allPosts = postRepository.findAll(Sort.by("creationDate"));
+            allPosts.removeAll(posts);
+            if (offset > posts.size()) {
+                offset -= posts.size();
+                if (allPosts.size() > offset + size) {
+                    size = allPosts.size() - offset;
+                }
+                return allPosts.subList(offset, size);
+            }
+            int firstSize = posts.size() - offset;
+            List<Post> result = posts.subList(offset, offset + firstSize);
+            result.addAll(allPosts.subList(0, size - (offset + firstSize)));
+            return result;
+        }
+        return posts.subList(offset, offset + 20);
+    }
 //        List<Integer> subscribedSubVykops = user.getSubVykopList().stream()
 //                .map(x -> x.getId()).collect(Collectors.toList());
 //
@@ -76,7 +96,7 @@ public class PostService {
 //        MapSqlParameterSource sqlParam = new MapSqlParameterSource();
 //        sqlParam.addValue("ids", subscribedSubVykops);
 //        return pgsqlTemplateNamed.query(CHECK_ACCOUNT, sqlParam, new BeanPropertyRowMapper<>(Post.class));
-    }
+
     public String upvote(int postId, Principal principal) {
         User user = userRepository.findByUsername(principal.getName());
         Optional<Post> post = postRepository.findById(postId);

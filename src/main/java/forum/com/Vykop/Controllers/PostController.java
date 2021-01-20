@@ -36,8 +36,9 @@ class PostController {
     }
 
     @GetMapping("/userposts")
-    Set<Post> userPosts(Principal principal) {
-        return postService.getFeedPosts(principal);
+    ResponseEntity userPosts(Principal principal,
+                        @RequestParam(name = "page") int page) {
+        return ResponseEntity.ok().body(postService.getFeedPosts(principal, page));
     }
 
     @GetMapping("/posts/{subvykop}")
