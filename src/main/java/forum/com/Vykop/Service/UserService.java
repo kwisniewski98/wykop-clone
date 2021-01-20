@@ -30,7 +30,6 @@ public class UserService {
     private static final String usernamePattern = "[a-zA-z0-9]{5,}";
     private static final String passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
     public String  registerUser(UserRegisterForm userForm) {
-
         if (userRepository.findByUsername(userForm.getUsername()) != null ) return "username already exists";
         if (userRepository.findByEmail(userForm.getEmail()) != null) return "email already exists";
 
@@ -42,6 +41,18 @@ public class UserService {
                 "user");
         userRepository.save(user);
         return "ok";
+    }
+
+    public void createUser(User new_user) {
+        if (userRepository.findByUsername(new_user.getUsername()) != null ) return;
+        if (userRepository.findByEmail(new_user.getEmail()) != null) return;
+        User user = new User(0,
+                new_user.getUsername(),
+                new_user.getPassword(),
+                new_user.getEmail(),
+                new Date(System.currentTimeMillis()),
+                new_user.getRole());
+        userRepository.save(user);
     }
 
     public String uploadAvatar(MultipartFile file, Principal principal){

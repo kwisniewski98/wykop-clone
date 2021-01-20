@@ -42,6 +42,11 @@ class UserController {
         this.repository = repository;
     }
 
+    @GetMapping("/users/{id}")
+    User byId(@PathVariable int id) {
+        return repository.findById(id).orElse(null);
+    }
+
     @GetMapping("/users")
     List<User> all() {
         return repository.findAll();
@@ -75,9 +80,11 @@ class UserController {
         String fileURL = userService.uploadAvatar(file, principal);
         return ResponseEntity.ok().body(fileURL);
     }
+
     @PostMapping("/users")
-    User newUser(@RequestBody User newUser) {
-        return repository.save(newUser);
+    User newUser(@RequestBody @Valid User newUser) {
+        userService.createUser(newUser);
+        return repository.findByUsername(newUser.getUsername());
     }
 
     @PutMapping("/users/{id}")
