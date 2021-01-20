@@ -20,7 +20,6 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
     @JoinColumn(name = "author")
-    @JsonIgnore
     private User author;
 
     @ManyToMany(mappedBy = "upvotedComments")

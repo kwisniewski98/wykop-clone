@@ -21,7 +21,8 @@ CREATE TABLE sub_vykop
     id          serial primary key,
     name        text not null,
     description text not null,
-    banner      text not null
+    banner      text not null,
+    avatar      text not null
 );
 CREATE TABLE admin_list
 (
@@ -90,8 +91,8 @@ values ('Text with img', 'https://marketingprzykawie.pl/wp-content/uploads/2019/
 insert into content (text, image, video)
 values ('Text with video', null,
         'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&fs=1&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0');
-insert into sub_vykop (name, description, banner)
-values ('Some subvykop', 'description','http://clipart-library.com/newimages/clip-art-banner-7.png' );
+insert into sub_vykop (name, description, banner, avatar)
+values ('Some subvykop', 'description','http://clipart-library.com/newimages/clip-art-banner-7.png', 'http://dummyimage.com/175x144.jpg/ff4444/ffffff' );
 insert into admin_list (sub_vykop, user_id)
 values (1, 1);
 insert into sub_vykop_list (sub_vykop, user_id)
