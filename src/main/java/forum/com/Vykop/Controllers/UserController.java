@@ -42,7 +42,7 @@ class UserController {
         this.repository = repository;
     }
 
-    @GetMapping
+    @GetMapping("/users/me")
     ResponseEntity me(Principal principal) {
         User user = repository.findByUsername(principal.getName());
         if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
