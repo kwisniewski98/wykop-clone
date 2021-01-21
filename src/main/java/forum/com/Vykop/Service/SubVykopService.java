@@ -60,12 +60,18 @@ public class SubVykopService {
             throw new NotFoundException("subVykop not found");
         }
         SubVykop s = subVykop.get();
-        if(s.getSubcribedList().contains(user)) return "already subscribed";
+        if(s.getSubcribedList().contains(user)) {
+            user.getSubVykopList().remove(s);
+            s.getSubcribedList().remove(user);
+            userRepository.save(user);
+            sub_vykopRepository.save(s);
+            return "not subscribed";
+        }
         user.getSubVykopList().add(s);
         s.getSubcribedList().add(user);
         userRepository.save(user);
         sub_vykopRepository.save(s);
-        return "ok";
+        return "subscribed";
     }
     public List<String> subVykopsMatching(String match) {
         return sub_vykopRepository.findAll().stream().map(SubVykop::getName).filter(
