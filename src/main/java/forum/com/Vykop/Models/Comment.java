@@ -100,6 +100,6 @@ public class Comment implements Comparable{
     @Override
     public int compareTo(@NotNull Object o) {
         Comment comment = (Comment) o;
-        return this.id.compareTo(comment.id);
+        return comment.id.compareTo(this.id);
     }
 }
