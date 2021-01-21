@@ -1,7 +1,6 @@
 package forum.com.Vykop.Service;
 
-import forum.com.Vykop.Models.Content;
-import forum.com.Vykop.Models.Post;
+
 import forum.com.Vykop.Models.SubVykop;
 import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Repositories.Sub_vykopRepository;
@@ -14,10 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityExistsException;
-import java.security.Principal;
-import java.sql.Date;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
