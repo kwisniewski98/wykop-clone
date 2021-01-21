@@ -25,7 +25,6 @@ public class Post {
     private Date creationDate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "sub_vykopid")
-    @JsonIgnore
     private SubVykop subVykop;
 
     @ManyToMany(mappedBy = "upvotedPosts")
