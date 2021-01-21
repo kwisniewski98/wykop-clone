@@ -61,7 +61,7 @@ class PostController {
     }
 
     @PostMapping("/posts/{postId}/comment")
-    ResponseEntity comment(@PathVariable int postId, @RequestParam("text") String text, Principal principal) {
+    ResponseEntity comment(@PathVariable int postId, @RequestBody String text, Principal principal) {
         return ResponseEntity.ok().body(commentService.createComment(text, postId, principal.getName()));
     }
 
@@ -89,8 +89,8 @@ class PostController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/posts/{id}")
-    ResponseEntity getPost(@PathVariable int id){
+    @GetMapping("/post")
+    ResponseEntity getPost(@RequestParam int id){
         Optional<Post> post = postRepository.findById(id);
         if (post.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         else return ResponseEntity.ok().body(post.get());
