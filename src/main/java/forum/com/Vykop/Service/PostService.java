@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import forum.com.Vykop.Models.*;
 import forum.com.Vykop.Repositories.*;
 import forum.com.Vykop.Storage.StorageService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -57,6 +60,9 @@ public class PostService {
     @Qualifier("sub_vykopRepository")
     @Autowired
     private Sub_vykopRepository sub_vykopRepository;
+
+    @Autowired
+    private CommentService commentService;
 
 
 
@@ -180,6 +186,17 @@ public class PostService {
             resultPosts.add(post);
         }
         return resultPosts;
+    }
+    public List<Post> getPostsBySubvykop(String subVykop, int page, String username) throws NotFoundException {
+        List<Post> posts = postRepository.findBySubVykop_Name(subVykop);
+        if (posts.size() == 0) throw new NotFoundException("subVykop not found");
+        int size = 20;
+        int offset = page * size;
+        if (posts.size() < offset) throw new NotFoundException("subVykop not found");
+        if ( size + posts.size() > offset ) size = posts.size() - offset;
+        return addUpvoteToPosts(posts.subList(offset, offset + size), username);
+
+        //return commentService.createComment(text, postId, principal.getName()
     }
 
     /*

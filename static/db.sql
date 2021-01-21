@@ -29,16 +29,16 @@ CREATE TABLE admin_list
     id        serial primary key,
     sub_vykop integer not null,
     user_id   integer not null,
-    constraint fk_user foreign key (user_id) references users (id),
-    constraint fk_vykop foreign key (sub_vykop) references sub_vykop (id)
+    constraint fk_user foreign key (user_id) references users (id) on delete cascade ,
+    constraint fk_vykop foreign key (sub_vykop) references sub_vykop (id) on delete cascade
 );
 CREATE TABLE sub_vykop_list
 (
     id        serial primary key,
     sub_vykop integer not null,
     user_id   integer not null,
-    constraint fk_user foreign key (user_id) references users (id),
-    constraint fk_vykop foreign key (sub_vykop) references sub_vykop (id)
+    constraint fk_user foreign key (user_id) references users (id) on delete  cascade ,
+    constraint fk_vykop foreign key (sub_vykop) references sub_vykop (id) on delete cascade
 );
 CREATE TABLE post
 (
@@ -49,7 +49,7 @@ CREATE TABLE post
     creation_date date    not null,
     title         text    not null,
     sub_vykopid  integer not null,
-    constraint fk_content foreign key (content) references content (id),
+    constraint fk_content foreign key (content) references content (id) on delete cascade ,
     constraint fk_author foreign key (author) references users (id)
 );
 CREATE TABLE comment
@@ -68,16 +68,16 @@ CREATE TABLE upvoted_comment
     id         serial primary key,
     user_id    integer not null,
     comment_id integer not null,
-    constraint fk_user foreign key (user_id) references users (id),
-    constraint fk_comment foreign key (comment_id) references comment (id)
+    constraint fk_user foreign key (user_id) references users (id) on delete cascade ,
+    constraint fk_comment foreign key (comment_id) references comment (id) on delete  cascade
 );
 CREATE TABLE upvoted_post
 (
     id      serial primary key,
     user_id integer not null,
     post_id integer not null,
-    constraint fk_user foreign key (user_id) references users (id),
-    constraint fk_post foreign key (post_id) references post (id)
+    constraint fk_user foreign key (user_id) references users (id) on delete cascade,
+    constraint fk_post foreign key (post_id) references post (id) on delete cascade
 );
 insert into users (username, password, role, registration_date, email,avatar)
 values ('admin', 'password', 'admin', '01-01-2000', 'admin@test.com', 'http://dummyimage.com/230x198.png/cc0000/ffffff');

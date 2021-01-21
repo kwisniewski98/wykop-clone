@@ -4,6 +4,7 @@ import forum.com.Vykop.Models.Post;
 import forum.com.Vykop.Repositories.PostRepository;
 import forum.com.Vykop.Service.CommentService;
 import forum.com.Vykop.Service.PostService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -54,10 +55,14 @@ class PostController {
     }
 
     @GetMapping("/posts/{subvykop}")
-    ResponseEntity subredditPosts(@PathVariable String  subvykop, Principal principal) {
-        Set<Post> posts = repository.findBySubVykop_Name(subvykop);
-        if (posts.size() == 0) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        return ResponseEntity.ok().body(postService.addUpvoteToPosts(posts, principal.getName()));
+    ResponseEntity subredditPosts(@PathVariable String  subvykop, @RequestParam("page") int page, Principal principal) {
+
+
+        try {
+            return ResponseEntity.ok().body(postService.getPostsBySubvykop(subvykop, page, principal.getName()));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping("/posts/{postId}/comment")
