@@ -85,9 +85,11 @@ public class PostService {
             posts.addAll(subVykop.getPosts());
         }
         posts.sort(Comparator.comparing(Post::getCreationDate).thenComparing(Post::getId));
-        int offset = page * 20;
-        int size = 20;
-        if (offset > posts.size()  + size ) {
+        int size = 3;
+        int offset = page * size;
+        // Potrzebujemy innych postow niz z zasubskrybowanych
+        if (offset + size > posts.size() ) {
+
             List<Post> allPosts = postRepository.findAll(Sort.by("creationDate", "id"));
             allPosts.removeAll(posts);
             if (offset > posts.size()) {
@@ -110,9 +112,9 @@ public class PostService {
                 result = posts.subList(offset, posts.size());
             }
             try {
-                result.addAll(allPosts.subList(offset, size - (offset + firstSize)));
+                result.addAll(allPosts.subList(0, size -  firstSize));
             } catch (IndexOutOfBoundsException e){
-                result.addAll(allPosts.subList(offset, allPosts.size()));
+                result.addAll(allPosts.subList(0, allPosts.size()));
             }
             return addUpvoteToPosts(result, principal.getName());
         }
