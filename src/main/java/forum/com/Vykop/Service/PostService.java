@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import forum.com.Vykop.Models.*;
 import forum.com.Vykop.Repositories.*;
+import forum.com.Vykop.Storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
@@ -12,9 +13,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.security.Principal;
+import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +51,12 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private StorageService storageService;
+
+    @Qualifier("sub_vykopRepository")
+    @Autowired
+    private Sub_vykopRepository sub_vykopRepository;
 
 
 
@@ -123,6 +132,32 @@ public class PostService {
         return postRepository.findAll().stream().filter(x -> x.getSubVykop().getName().equals(subVykop))
                 .map(Post::getTitle).filter(
                 x -> x.contains(match)).collect(Collectors.toList());
+    }
+    public Post createPost(MultipartFile file, String title, String text, String username, String subvykopName) {
+        User user = userRepository.findByUsername(username);
+        SubVykop subVykop = sub_vykopRepository.findByName(subvykopName);
+        storageService.store(file);
+        file.getOriginalFilename();
+        Content content = new Content();
+        content.setText(text);
+        if (file.getContentType().startsWith("image")){
+            content.setImage("http://localhost:8080/files/" + file.getOriginalFilename());
+        }
+        if (file.getContentType().startsWith("video")){
+            content.setVideo("http://localhost:8080/files/" + file.getOriginalFilename());
+        }
+        content = contentRepository.saveAndFlush(content);
+        Post post = new Post();
+        post.setTitle(title);
+        post.setContent(content);
+        post.setCreationDate(new Date(System.currentTimeMillis()));
+        post.setSubVykop(subVykop);
+        post.setVotes(0);
+        post.setAuthor(user);
+        post = postRepository.saveAndFlush(post);
+        content.setPost(post);
+        contentRepository.save(content);
+        return post;
     }
     /*
 

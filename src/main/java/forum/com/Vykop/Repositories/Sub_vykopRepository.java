@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository("sub_vykopRepository")
 public interface Sub_vykopRepository extends JpaRepository<SubVykop, Integer> {
-
+    SubVykop findByName(String name);
 }
