@@ -6,6 +6,7 @@ import forum.com.Vykop.Models.*;
 import forum.com.Vykop.Repositories.*;
 import forum.com.Vykop.Storage.StorageService;
 import javassist.NotFoundException;
+import org.jboss.jandex.Index;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
@@ -86,25 +87,41 @@ public class PostService {
         posts.sort(Comparator.comparing(Post::getCreationDate));
         int offset = page * 20;
         int size = 20;
-        if (offset + size > posts.size() ) {
-            List<Post> allPosts = postRepository.findAll(Sort.by("creationDate"));
+        if (offset > posts.size()  + size ) {
+            List<Post> allPosts = postRepository.findAll(Sort.by("creationDate", "id"));
             allPosts.removeAll(posts);
             if (offset > posts.size()) {
                 offset -= posts.size();
                 if (allPosts.size() > offset + size) {
                     size = allPosts.size() - offset;
                 }
-                return addUpvoteToPosts(allPosts.subList(offset, size), principal.getName());
+                try {
+                    return addUpvoteToPosts(allPosts.subList(offset, size), principal.getName());
+                } catch (IndexOutOfBoundsException e) {
+                    return addUpvoteToPosts(allPosts.subList(offset, allPosts.size()), principal.getName());
+
+                }
             }
             int firstSize = posts.size() - offset;
-            List<Post> result = posts.subList(offset, offset + firstSize);
-            result.addAll(allPosts.subList(0, size - (offset + firstSize)));
+            List<Post> result;
+            try {
+                result = posts.subList(offset, offset + firstSize);
+            } catch (IndexOutOfBoundsException e){
+                result = posts.subList(offset, posts.size());
+            }
+            try {
+                result.addAll(allPosts.subList(offset, size - (offset + firstSize)));
+            } catch (IndexOutOfBoundsException e){
+                result.addAll(allPosts.subList(offset, allPosts.size()));
+            }
             return addUpvoteToPosts(result, principal.getName());
         }
-        if (size > posts.size()) {
-            return addUpvoteToPosts(posts, principal.getName());
+        try {
+            return addUpvoteToPosts(posts.subList(offset, offset + size), principal.getName());
         }
-        return addUpvoteToPosts(posts.subList(offset, offset + size), principal.getName());
+        catch (IndexOutOfBoundsException e) {
+            return addUpvoteToPosts(posts.subList(offset, posts.size() ), principal.getName());
+        }
     }
 //        List<Integer> subscribedSubVykops = user.getSubVykopList().stream()
 //                .map(x -> x.getId()).collect(Collectors.toList());
