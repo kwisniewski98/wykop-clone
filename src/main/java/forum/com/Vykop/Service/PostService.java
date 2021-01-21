@@ -88,17 +88,17 @@ public class PostService {
                 if (allPosts.size() > offset + size) {
                     size = allPosts.size() - offset;
                 }
-                return allPosts.subList(offset, size);
+                return addUpvoteToPosts(allPosts.subList(offset, size), principal.getName());
             }
             int firstSize = posts.size() - offset;
             List<Post> result = posts.subList(offset, offset + firstSize);
             result.addAll(allPosts.subList(0, size - (offset + firstSize)));
-            return result;
+            return addUpvoteToPosts(result, principal.getName());
         }
         if (size > posts.size()) {
-            return posts;
+            return addUpvoteToPosts(posts, principal.getName());
         }
-        return posts.subList(offset, offset + size);
+        return addUpvoteToPosts(posts.subList(offset, offset + size), principal.getName());
     }
 //        List<Integer> subscribedSubVykops = user.getSubVykopList().stream()
 //                .map(x -> x.getId()).collect(Collectors.toList());
@@ -171,6 +171,15 @@ public class PostService {
         }
         post.setComments(comments);
         return post;
+    }
+    public List<Post> addUpvoteToPosts(Collection<Post> posts, String username){
+        User user = userRepository.findByUsername(username);
+        List<Post> resultPosts = new ArrayList<>();
+        for(Post post : posts){
+            post.setUpvoted(post.getUpvotedUsers().contains(user));
+            resultPosts.add(post);
+        }
+        return resultPosts;
     }
 
     /*

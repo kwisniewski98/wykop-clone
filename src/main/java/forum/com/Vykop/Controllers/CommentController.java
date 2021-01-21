@@ -57,7 +57,7 @@ class CommentController {
 
     @PostMapping("/comments/upvote/{id}")
     ResponseEntity upvote(@PathVariable int id, Principal principal) {
-        String result = commentService.upvote(id, principal);
-        return ResponseEntity.ok().body(result);
+        commentService.upvote(id, principal);
+        return ResponseEntity.ok().body(id);
     }
 }

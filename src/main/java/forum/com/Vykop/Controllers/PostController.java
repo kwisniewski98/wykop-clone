@@ -54,10 +54,10 @@ class PostController {
     }
 
     @GetMapping("/posts/{subvykop}")
-    ResponseEntity subredditPosts(@PathVariable String  subvykop) {
+    ResponseEntity subredditPosts(@PathVariable String  subvykop, Principal principal) {
         Set<Post> posts = repository.findBySubVykop_Name(subvykop);
         if (posts.size() == 0) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        return ResponseEntity.ok().body(posts);
+        return ResponseEntity.ok().body(postService.addUpvoteToPosts(posts, principal.getName()));
     }
 
     @PostMapping("/posts/{postId}/comment")
@@ -86,7 +86,7 @@ class PostController {
     @PostMapping("/posts/upvote/{id}")
     ResponseEntity upvote(@PathVariable int id, Principal principal) {
         String result = postService.upvote(id, principal);
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().body(id);
     }
 
     @GetMapping("/post")
