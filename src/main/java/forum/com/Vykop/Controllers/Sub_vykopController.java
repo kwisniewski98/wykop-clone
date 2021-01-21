@@ -42,10 +42,10 @@ class Sub_vykopController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-    @GetMapping("/subvykop/{id}/subscribe")
-    ResponseEntity subscribe(@PathVariable int id, Principal principal){
+    @PostMapping("/subvykop/subscribe")
+    ResponseEntity subscribe(@RequestBody String id, Principal principal){
         try {
-            String result = subVykopService.subscribe(principal.getName(), id);
+            String result = subVykopService.subscribe(principal.getName(), Integer.parseInt(id));
             return ResponseEntity.ok().body(result);
         }catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
