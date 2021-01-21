@@ -49,17 +49,19 @@ public class SubVykopService {
         }
         return user.getSubVykopList().contains(subVykop.get());
     }
-    public void subscribe(String username, int subVykopId) throws NotFoundException {
+    public String  subscribe(String username, int subVykopId) throws NotFoundException {
         User user = userRepository.findByUsername(username);
         Optional<SubVykop> subVykop = sub_vykopRepository.findById(subVykopId);
         if (subVykop.isEmpty()) {
             throw new NotFoundException("subVykop not found");
         }
         SubVykop s = subVykop.get();
+        if(s.getSubcribedList().contains(user)) return "already subscribed";
         user.getSubVykopList().add(s);
         s.getSubcribedList().add(user);
         userRepository.save(user);
         sub_vykopRepository.save(s);
+        return "ok";
     }
     public List<String> subVykopsMatching(String match) {
         return sub_vykopRepository.findAll().stream().map(SubVykop::getName).filter(

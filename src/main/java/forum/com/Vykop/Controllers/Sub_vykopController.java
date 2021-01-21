@@ -44,8 +44,8 @@ class Sub_vykopController {
     @GetMapping("/subvykop/{id}/subscribe")
     ResponseEntity subscribe(@PathVariable int id, Principal principal){
         try {
-            subVykopService.subscribe(principal.getName(), id);
-            return ResponseEntity.ok().build();
+            String result = subVykopService.subscribe(principal.getName(), id);
+            return ResponseEntity.ok().body(result);
         }catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

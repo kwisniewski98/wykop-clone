@@ -56,8 +56,6 @@ class PostController {
 
     @GetMapping("/posts/{subvykop}")
     ResponseEntity subredditPosts(@PathVariable String  subvykop, @RequestParam("page") int page, Principal principal) {
-
-
         try {
             return ResponseEntity.ok().body(postService.getPostsBySubvykop(subvykop, page, principal.getName()));
         } catch (NotFoundException e) {
