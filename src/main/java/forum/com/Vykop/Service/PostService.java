@@ -164,7 +164,7 @@ public class PostService {
     }
     public Post postWithCommentUpvoted(Post post, String username){
         User user = userRepository.findByUsername(username);
-        Set<Comment> comments = new HashSet<>();
+        Set<Comment> comments = new TreeSet<>();
         for (Comment comment: post.getComments()) {
             comment.setUpvoted(comment.getUpvotedUsers().contains(user));
             comments.add(comment);

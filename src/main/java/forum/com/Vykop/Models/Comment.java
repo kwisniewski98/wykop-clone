@@ -2,13 +2,14 @@ package forum.com.Vykop.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "comment")
-public class Comment {
+public class Comment implements Comparable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -94,5 +95,11 @@ public class Comment {
 
     public void setVotes(Integer votes) {
         this.votes = votes;
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        Comment comment = (Comment) o;
+        return this.id.compareTo(comment.id);
     }
 }
