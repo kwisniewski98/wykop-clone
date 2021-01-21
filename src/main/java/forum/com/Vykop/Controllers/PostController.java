@@ -90,10 +90,10 @@ class PostController {
     }
 
     @GetMapping("/post")
-    ResponseEntity getPost(@RequestParam int id){
+    ResponseEntity getPost(@RequestParam int id, Principal principal){
         Optional<Post> post = postRepository.findById(id);
         if (post.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        else return ResponseEntity.ok().body(post.get());
+        else return ResponseEntity.ok().body(postService.postWithCommentUpvoted(post.get(), principal.getName()));
     }
 
     @DeleteMapping("/posts/{id}")

@@ -162,6 +162,17 @@ public class PostService {
         contentRepository.save(content);
         return post;
     }
+    public Post postWithCommentUpvoted(Post post, String username){
+        User user = userRepository.findByUsername(username);
+        Set<Comment> comments = new HashSet<>();
+        for (Comment comment: post.getComments()) {
+            comment.setUpvoted(comment.getUpvotedUsers().contains(user));
+            comments.add(comment);
+        }
+        post.setComments(comments);
+        return post;
+    }
+
     /*
 
     public Account getAccount(Long user_id){

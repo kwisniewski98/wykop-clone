@@ -1,6 +1,7 @@
 package forum.com.Vykop.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -21,10 +22,21 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
     @JoinColumn(name = "author")
     private User author;
-
     @ManyToMany(mappedBy = "upvotedComments")
     @JsonIgnore
     private Set<User> upvotedUsers;
+
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private boolean upvoted;
+
+    public boolean isUpvoted() {
+        return upvoted;
+    }
+
+    public void setUpvoted(boolean upvoted) {
+        this.upvoted = upvoted;
+    }
 
     public User getAuthor() {
         return author;
