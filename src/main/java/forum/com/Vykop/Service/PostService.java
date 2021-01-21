@@ -95,7 +95,10 @@ public class PostService {
             result.addAll(allPosts.subList(0, size - (offset + firstSize)));
             return result;
         }
-        return posts.subList(offset, offset + 20);
+        if (size > posts.size()) {
+            return posts;
+        }
+        return posts.subList(offset, offset + size);
     }
 //        List<Integer> subscribedSubVykops = user.getSubVykopList().stream()
 //                .map(x -> x.getId()).collect(Collectors.toList());
