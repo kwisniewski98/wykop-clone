@@ -84,7 +84,7 @@ public class PostService {
         for (SubVykop subVykop : user.getSubVykopList()) {
             posts.addAll(subVykop.getPosts());
         }
-        posts.sort(Comparator.comparing(Post::getCreationDate));
+        posts.sort(Comparator.comparing(Post::getCreationDate).thenComparing(Post::getId));
         int offset = page * 20;
         int size = 20;
         if (offset > posts.size()  + size ) {
