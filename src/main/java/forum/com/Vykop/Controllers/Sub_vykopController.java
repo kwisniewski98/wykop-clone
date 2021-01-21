@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityExistsException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -64,8 +65,15 @@ class Sub_vykopController {
     }
 
     @PostMapping("/sub_vykop")
-    SubVykop newSub_vykop(@RequestBody SubVykop newSub_vykop) {
-        return repository.save(newSub_vykop);
+    ResponseEntity newSub_vykop(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
+                          @RequestParam("description") String description, Principal principal ) {
+        try {
+            return ResponseEntity.ok().body(
+                    subVykopService.createSubVykop(file, name, description, principal.getName()));
+        }
+        catch (EntityExistsException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @PutMapping("/sub_vykop/{id}")

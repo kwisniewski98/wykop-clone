@@ -1,5 +1,7 @@
 package forum.com.Vykop.Service;
 
+import forum.com.Vykop.Models.Content;
+import forum.com.Vykop.Models.Post;
 import forum.com.Vykop.Models.SubVykop;
 import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Repositories.Sub_vykopRepository;
@@ -11,7 +13,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityExistsException;
 import java.security.Principal;
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -66,5 +70,21 @@ public class SubVykopService {
     public List<String> subVykopsMatching(String match) {
         return sub_vykopRepository.findAll().stream().map(SubVykop::getName).filter(
                 x -> x.contains(match)).collect(Collectors.toList());
+    }
+    public SubVykop createSubVykop(MultipartFile file, String name, String description, String username) {
+        User user = userRepository.findByUsername(username);
+        if (sub_vykopRepository.findByName(name) != null){
+            throw new EntityExistsException();
+        }
+        storageService.store(file);
+        file.getOriginalFilename();
+        SubVykop subVykop = new SubVykop();
+        subVykop.setBanner("http://localhost:8080/files/" + file.getOriginalFilename());
+        subVykop.setDescription(description);
+        subVykop.setName(name);
+        subVykop = sub_vykopRepository.saveAndFlush(subVykop);
+        subVykop.getAdmins().add(user);
+        subVykop = sub_vykopRepository.saveAndFlush(subVykop);
+        return subVykop;
     }
 }
