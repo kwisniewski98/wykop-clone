@@ -42,6 +42,13 @@ class UserController {
         this.repository = repository;
     }
 
+    @GetMapping
+    ResponseEntity me(Principal principal) {
+        User user = repository.findByUsername(principal.getName());
+        if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok().body(user);
+    }
+
     @GetMapping("/users/{id}")
     User byId(@PathVariable int id) {
         return repository.findById(id).orElse(null);
