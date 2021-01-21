@@ -86,7 +86,7 @@ public class PostService {
         posts.sort(Comparator.comparing(Post::getCreationDate));
         int offset = page * 20;
         int size = 20;
-        if (offset - size > posts.size() ) {
+        if (offset + size > posts.size() ) {
             List<Post> allPosts = postRepository.findAll(Sort.by("creationDate"));
             allPosts.removeAll(posts);
             if (offset > posts.size()) {
