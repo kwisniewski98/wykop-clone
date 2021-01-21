@@ -78,7 +78,7 @@ public class PostService {
         sqlParam.addValue("author", user.getId());
         return pgsqlTemplateNamed.query(CHECK_POST, sqlParam, new BeanPropertyRowMapper<>(Post.class));
     }
-    public List<Post> getFeedPosts(Principal principal, int page) {
+    public List<Post> getFeedPosts(Principal principal, int page) throws NotFoundException {
         User user = userRepository.findByUsername(principal.getName());
         List<Post> posts = new ArrayList<>();
         for (SubVykop subVykop : user.getSubVykopList()) {
@@ -94,9 +94,10 @@ public class PostService {
             allPosts.removeAll(posts);
             if (offset > posts.size()) {
                 offset -= posts.size();
-                if (allPosts.size() > offset + size) {
+                if (allPosts.size() < offset + size) {
                     size = allPosts.size() - offset;
                 }
+                if (size < 0) throw new NotFoundException(" ");
                 try {
                     return addUpvoteToPosts(allPosts.subList(offset, size), principal.getName());
                 } catch (IndexOutOfBoundsException e) {

@@ -51,7 +51,12 @@ class PostController {
     @GetMapping("/userposts")
     ResponseEntity userPosts(Principal principal,
                         @RequestParam(name = "page") int page) {
-        return ResponseEntity.ok().body(postService.getFeedPosts(principal, page));
+        try {
+            return ResponseEntity.ok().body(postService.getFeedPosts(principal, page));
+        }
+        catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/posts/{subvykop}")
