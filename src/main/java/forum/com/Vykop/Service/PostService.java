@@ -99,7 +99,7 @@ public class PostService {
                 }
                 if (size < 0) throw new NotFoundException(" ");
                 try {
-                    return addUpvoteToPosts(allPosts.subList(offset, size), principal.getName());
+                    return addUpvoteToPosts(allPosts.subList(offset, offset + size), principal.getName());
                 } catch (IndexOutOfBoundsException e) {
                     return addUpvoteToPosts(allPosts.subList(offset, allPosts.size()), principal.getName());
 
