@@ -70,9 +70,9 @@ public class SubVykopService {
         sub_vykopRepository.save(s);
         return "subscribed";
     }
-    public List<String> subVykopsMatching(String match) {
-        return sub_vykopRepository.findAll().stream().map(SubVykop::getName).filter(
-                x -> x.contains(match)).collect(Collectors.toList());
+    public List<SubVykop> subVykopsMatching(String match) {
+        return sub_vykopRepository.findAll().stream().filter(
+                x -> x.getName().contains(match)).collect(Collectors.toList());
     }
     public SubVykop createSubVykop(MultipartFile file, String name, String description, String username) {
         User user = userRepository.findByUsername(username);
