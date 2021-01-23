@@ -158,6 +158,9 @@ public class PostService {
         return "upvote";
     }
     public List<String> postsMatching(String match, String subVykop) {
+        if (match.equals("")) {
+            return new ArrayList<>();
+        }
         return postRepository.findAll().stream().filter(x -> x.getSubVykop().getName().equals(subVykop))
                 .map(Post::getTitle).filter(
                 x -> x.contains(match)).collect(Collectors.toList());
