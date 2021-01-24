@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityExistsException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,18 +72,20 @@ public class SubVykopService {
         return "subscribed";
     }
     public List<SubVykop> subVykopsMatching(String match) {
+        if (match.equals("")) return new ArrayList<>();
         return sub_vykopRepository.findAll().stream().filter(
                 x -> x.getName().toLowerCase().contains(match.toLowerCase())).collect(Collectors.toList());
     }
-    public SubVykop createSubVykop(MultipartFile file, String name, String description, String username) {
+    public SubVykop createSubVykop(MultipartFile banner, MultipartFile avatar, String name, String description, String username) {
         User user = userRepository.findByUsername(username);
         if (sub_vykopRepository.findByName(name) != null){
             throw new EntityExistsException();
         }
-        storageService.store(file);
-        file.getOriginalFilename();
+        storageService.store(banner);
+        storageService.store(avatar);
         SubVykop subVykop = new SubVykop();
-        subVykop.setBanner("http://localhost:8080/files/" + file.getOriginalFilename());
+        subVykop.setBanner("http://localhost:8080/files/" + banner.getOriginalFilename());
+        subVykop.setAvatar("http://localhost:8080/files/" + avatar.getOriginalFilename());
         subVykop.setDescription(description);
         subVykop.setName(name);
         subVykop = sub_vykopRepository.saveAndFlush(subVykop);

@@ -65,11 +65,12 @@ class Sub_vykopController {
     }
 
     @PostMapping("/sub_vykop")
-    ResponseEntity newSub_vykop(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
-                          @RequestParam("description") String description, Principal principal ) {
+    ResponseEntity newSub_vykop(@RequestParam("banner") MultipartFile banner, @RequestParam("avatar") MultipartFile avatar,
+                                @RequestParam("name") String name, @RequestParam("description") String description,
+                                Principal principal ) {
         try {
             return ResponseEntity.ok().body(
-                    subVykopService.createSubVykop(file, name, description, principal.getName()));
+                    subVykopService.createSubVykop(banner, avatar,  name, description, principal.getName()));
         }
         catch (EntityExistsException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

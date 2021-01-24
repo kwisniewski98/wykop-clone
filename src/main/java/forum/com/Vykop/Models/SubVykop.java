@@ -14,6 +14,8 @@ public class SubVykop {
     private String name;
     private String description;
     private String banner;
+    private String avatar;
+
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "subVykop")
     @JsonIgnore
@@ -25,6 +27,14 @@ public class SubVykop {
 
     public void setPosts(Set<Post> posts) {
         this.posts = posts;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     @ManyToMany(mappedBy = "adminList")
