@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityExistsException;
 import java.security.Principal;
 import java.sql.Date;
 import java.util.HashMap;
@@ -46,8 +47,8 @@ public class UserService {
     }
 
     public User createUser(User new_user, MultipartFile avatar) {
-        if (userRepository.findByUsername(new_user.getUsername()) != null ) return;
-        if (userRepository.findByEmail(new_user.getEmail()) != null) return;
+        if (userRepository.findByUsername(new_user.getUsername()) != null ) throw new EntityExistsException();
+        if (userRepository.findByEmail(new_user.getEmail()) != null) throw new EntityExistsException();
         User user = new User(0,
                 new_user.getUsername(),
                 new_user.getPassword(),

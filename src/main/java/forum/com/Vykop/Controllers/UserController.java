@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.sql.Date;
@@ -118,8 +119,12 @@ class UserController {
     }
 
     @PostMapping("/users")
-    User newUser(@RequestBody @Valid User newUser, @RequestParam("file") MultipartFile avatar)  {
-        return userService.createUser(newUser, avatar);
+    ResponseEntity newUser(@RequestBody @Valid User newUser, @RequestParam("file") MultipartFile avatar) {
+        try {
+            return ResponseEntity.ok().body(userService.createUser(newUser, avatar));
+        } catch (EntityExistsException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PutMapping("/users/{id}")
