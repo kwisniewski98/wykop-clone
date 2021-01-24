@@ -45,7 +45,7 @@ public class UserService {
         return "ok";
     }
 
-    public void createUser(User new_user) {
+    public User createUser(User new_user, MultipartFile avatar) {
         if (userRepository.findByUsername(new_user.getUsername()) != null ) return;
         if (userRepository.findByEmail(new_user.getEmail()) != null) return;
         User user = new User(0,
@@ -54,7 +54,9 @@ public class UserService {
                 new_user.getEmail(),
                 new Date(System.currentTimeMillis()),
                 new_user.getRole());
-        userRepository.save(user);
+        storageService.store(avatar);
+        user.setAvatar("http://localhost:8080/files/" + avatar.getOriginalFilename());
+        return userRepository.saveAndFlush(user);
     }
 
     public String uploadAvatar(MultipartFile file, Principal principal){

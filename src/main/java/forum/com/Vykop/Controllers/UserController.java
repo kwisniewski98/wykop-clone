@@ -118,9 +118,8 @@ class UserController {
     }
 
     @PostMapping("/users")
-    User newUser(@RequestBody @Valid User newUser) {
-        userService.createUser(newUser);
-        return repository.findByUsername(newUser.getUsername());
+    User newUser(@RequestBody @Valid User newUser, @RequestParam("file") MultipartFile avatar)  {
+        return userService.createUser(newUser, avatar);
     }
 
     @PutMapping("/users/{id}")
