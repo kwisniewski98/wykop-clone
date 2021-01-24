@@ -72,7 +72,7 @@ public class SubVykopService {
     }
     public List<SubVykop> subVykopsMatching(String match) {
         return sub_vykopRepository.findAll().stream().filter(
-                x -> x.getName().contains(match)).collect(Collectors.toList());
+                x -> x.getName().toLowerCase().contains(match.toLowerCase())).collect(Collectors.toList());
     }
     public SubVykop createSubVykop(MultipartFile file, String name, String description, String username) {
         User user = userRepository.findByUsername(username);
