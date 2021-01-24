@@ -4,6 +4,7 @@ import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Models.UserRegisterForm;
 import forum.com.Vykop.Repositories.UserRepository;
 import forum.com.Vykop.Storage.StorageService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.sql.Date;
+import java.util.HashMap;
 
 @Component
 public class UserService {
@@ -62,5 +64,20 @@ public class UserService {
         user.setAvatar(fileURL);
         userRepository.save(user);
         return fileURL;
+    }
+    public HashMap<String, Integer> userStats(String username) throws NotFoundException {
+        HashMap<String , Integer> stats = new HashMap<>();
+        User user = userRepository.findByUsername(username);
+        if (user == null) throw new NotFoundException("user not found");
+        stats.put("postUpvotes", user.getPosts().stream().reduce(
+                0, (sum, post) -> sum + post.getVotes(), Integer::sum)
+        );
+        stats.put("commentUpvotes", user.getComments().stream().reduce(
+                0, (sum, post) -> sum + post.getVotes(), Integer::sum)
+        );
+        stats.put("totalUpvotes", stats.get("postUpvotes") +stats.get("commentUpvotes"));
+        stats.put("comments", user.getComments().size());
+        stats.put("posts", user.getPosts().size());
+        return stats;
     }
 }

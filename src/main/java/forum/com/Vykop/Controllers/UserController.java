@@ -3,10 +3,13 @@ package forum.com.Vykop.Controllers;
 import forum.com.Vykop.Models.User;
 import forum.com.Vykop.Models.UserForm;
 import forum.com.Vykop.Models.UserRegisterForm;
+import forum.com.Vykop.Repositories.CommentRepository;
+import forum.com.Vykop.Repositories.PostRepository;
 import forum.com.Vykop.Repositories.UserRepository;
 import forum.com.Vykop.Service.UserService;
 import forum.com.Vykop.Storage.StorageService;
 import forum.com.Vykop.security.JwtTokenProvider;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +41,15 @@ class UserController {
     @Autowired
     private StorageService storageService;
 
+    @Qualifier("postRepository")
+    @Autowired
+    private PostRepository postRepository;
+
+    @Qualifier("commentRepository")
+    @Autowired
+    private CommentRepository commentRepository;
+
+
     UserController(@Qualifier("userRepository") UserRepository repository) {
         this.repository = repository;
     }
@@ -47,6 +59,23 @@ class UserController {
         User user = repository.findByUsername(principal.getName());
         if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.ok().body(user);
+    }
+    @GetMapping("/users/stats")
+    ResponseEntity userStats(Principal principal) {
+        try {
+            return ResponseEntity.ok().body(userService.userStats(principal.getName()));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @GetMapping("/users/posts")
+    ResponseEntity userPosts(Principal principal) {
+        return ResponseEntity.ok().body(postRepository.findByAuthor_Username(principal.getName()));
+    }
+
+    @GetMapping("/users/comments")
+    ResponseEntity userComments(Principal principal) {
+        return ResponseEntity.ok().body(commentRepository.findByAuthor_Username(principal.getName()));
     }
 
     @GetMapping("/users/{id}")

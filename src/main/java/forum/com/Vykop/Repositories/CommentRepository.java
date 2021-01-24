@@ -11,4 +11,6 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     List<Comment> findByPost(int id);
+
+    List<Comment> findByAuthor_Username(String username);
 }

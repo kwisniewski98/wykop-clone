@@ -12,4 +12,5 @@ import java.util.Set;
 @Repository("postRepository")
 public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findBySubVykop_Name(String name);
+    List<Post> findByAuthor_Username(String username);
 }
