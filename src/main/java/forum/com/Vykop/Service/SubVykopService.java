@@ -89,8 +89,8 @@ public class SubVykopService {
         subVykop.setDescription(description);
         subVykop.setName(name);
         subVykop = sub_vykopRepository.saveAndFlush(subVykop);
-        subVykop.getAdmins().add(user);
-        subVykop = sub_vykopRepository.saveAndFlush(subVykop);
+        //subVykop.getAdmins().add(user);
+        //subVykop = sub_vykopRepository.saveAndFlush(subVykop);
         return subVykop;
     }
 }

@@ -69,8 +69,9 @@ class Sub_vykopController {
                                 @RequestParam("name") String name, @RequestParam("description") String description,
                                 Principal principal ) {
         try {
-            return ResponseEntity.ok().body(
-                    subVykopService.createSubVykop(banner, avatar,  name, description, principal.getName()));
+            subVykopService.createSubVykop(banner, avatar,  name, description, principal.getName());
+            return ResponseEntity.ok().build();
+
         }
         catch (EntityExistsException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -97,7 +98,7 @@ class Sub_vykopController {
         repository.deleteById(id);
     }
     @GetMapping("/sub_vykop/search")
-    ResponseEntity findSubVykops(@RequestBody String match) {
+    ResponseEntity findSubVykops(@RequestParam String match) {
         return ResponseEntity.ok().body(subVykopService.subVykopsMatching(match));
     }
 }

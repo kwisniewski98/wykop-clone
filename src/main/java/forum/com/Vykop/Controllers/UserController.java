@@ -143,6 +143,11 @@ class UserController {
                 });
     }
 
+    @GetMapping("u/{name}")
+    User getUserByUsername(@PathVariable String name){
+        return repository.findByUsername(name);
+    }
+
     @DeleteMapping("/users/{id}")
     void deleteUser(@PathVariable int id) {
         repository.deleteById(id);
