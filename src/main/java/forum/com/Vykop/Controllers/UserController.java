@@ -128,19 +128,22 @@ class UserController {
     }
 
     @PutMapping("/users/{id}")
-    User replaceUser(@RequestBody User newUser, @PathVariable int id) {
+    User replaceUser(@RequestParam("username") String username, @RequestParam("password") String password,
+                     @RequestParam("email") String email, @RequestParam("registrationDate") Date registrationDate,
+                     @RequestParam("role") String role, @RequestParam("file") MultipartFile file,
+                     @PathVariable int id) {
+        storageService.store(file);
         return repository.findById(id)
                 .map(user -> {
-                    user.setUsername(newUser.getUsername());
-                    user.setPassword(newUser.getPassword());
-                    user.setRegistrationDate(newUser.getRegistrationDate());
-                    user.setAvatar(newUser.getAvatar());
+                    user.setUsername(username);
+                    user.setPassword(password);
+                    user.setRegistrationDate(registrationDate);
+                    user.setRole(role);
+                    user.setAvatar("http://localhost:8080/files/" + file.getOriginalFilename());
                     return repository.save(user);
                 })
-                .orElseGet(() -> {
-                    newUser.setId(id);
-                    return repository.save(newUser);
-                });
+                .orElseGet(() -> repository.save(new User(id, username, password, email, registrationDate, role,
+                        "http://localhost:8080/files/" + file.getOriginalFilename() )));
     }
 
     @GetMapping("u/{name}")

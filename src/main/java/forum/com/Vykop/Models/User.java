@@ -137,6 +137,16 @@ public class User {
         this.role = role;
     }
 
+    public User(Integer id, String username, String password, String email, Date registrationDate, String role, String avatar) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.registrationDate = registrationDate;
+        this.role = role;
+        this.avatar = avatar;
+    }
+
     public static ArrayList<String> getRoles() {
         return roles;
     }
