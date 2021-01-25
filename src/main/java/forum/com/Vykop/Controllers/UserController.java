@@ -130,15 +130,18 @@ class UserController {
     @PutMapping("/users/{id}")
     User replaceUser(@RequestParam("username") String username, @RequestParam("password") String password,
                      @RequestParam("email") String email, @RequestParam("registrationDate") Date registrationDate,
-                     @RequestParam("role") String role, @RequestParam("file") MultipartFile file,
+                     @RequestParam(value = "role", required = false) String role, @RequestParam(value = "file", required = false) MultipartFile file,
                      @PathVariable int id) {
+        if(file != null)
         storageService.store(file);
         return repository.findById(id)
                 .map(user -> {
                     user.setUsername(username);
                     user.setPassword(password);
                     user.setRegistrationDate(registrationDate);
+                    if(role != null)
                     user.setRole(role);
+                    if(file != null)
                     user.setAvatar("http://localhost:8080/files/" + file.getOriginalFilename());
                     return repository.save(user);
                 })
