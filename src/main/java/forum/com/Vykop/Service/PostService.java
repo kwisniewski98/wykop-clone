@@ -200,6 +200,7 @@ public class PostService {
             comment.setUpvoted(comment.getUpvotedUsers().contains(user));
             comments.add(comment);
         }
+        post.setUpvoted(post.getUpvotedUsers().contains(user));
         post.setComments(comments);
         return post;
     }
