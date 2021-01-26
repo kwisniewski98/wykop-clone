@@ -42,7 +42,7 @@ class PostController {
     }
 
     @PostMapping("/posts")
-    ResponseEntity newPost(@RequestParam("file") MultipartFile file, @RequestParam("title") String title,
+    ResponseEntity newPost(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("title") String title,
                  @RequestParam("text") String text, @RequestParam("subVykop") String subVykop, Principal principal) {
         return ResponseEntity.ok().body(postService.createPost(file, title, text, principal.getName(), subVykop));
 

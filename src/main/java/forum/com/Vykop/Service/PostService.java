@@ -168,16 +168,18 @@ public class PostService {
     public Post createPost(MultipartFile file, String title, String text, String username, String subvykopName) {
         User user = userRepository.findByUsername(username);
         SubVykop subVykop = sub_vykopRepository.findByName(subvykopName);
-        storageService.store(file);
-        file.getOriginalFilename();
         Content content = new Content();
+        if(file != null) {
+            storageService.store(file);
+            file.getOriginalFilename();
+            if (file.getContentType().startsWith("image")) {
+                content.setImage("http://localhost:8080/files/" + file.getOriginalFilename());
+            }
+            if (file.getContentType().startsWith("video")) {
+                content.setVideo("http://localhost:8080/files/" + file.getOriginalFilename());
+            }
+        }
         content.setText(text);
-        if (file.getContentType().startsWith("image")){
-            content.setImage("http://localhost:8080/files/" + file.getOriginalFilename());
-        }
-        if (file.getContentType().startsWith("video")){
-            content.setVideo("http://localhost:8080/files/" + file.getOriginalFilename());
-        }
         content = contentRepository.saveAndFlush(content);
         Post post = new Post();
         post.setTitle(title);
