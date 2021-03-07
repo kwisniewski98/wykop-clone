@@ -25,31 +25,6 @@ class CommentController {
         this.repository = repository;
     }
 
-    @GetMapping("/comments")
-    List<Comment> all() {
-        return repository.findAll();
-    }
-
-    @PostMapping("/comments")
-    Comment newComment(@RequestBody Comment newComment) {
-        return repository.save(newComment);
-    }
-
-    @PutMapping("/comments/{id}")
-    Comment replaceComment(@RequestBody Comment newComment, @PathVariable int id) {
-        return repository.findById(id)
-                .map(comment -> {
-                    comment.setPost(newComment.getPost());
-                    comment.setText(newComment.getText());
-                    comment.setVotes(newComment.getVotes());
-                    return repository.save(comment);
-                })
-                .orElseGet(() -> {
-                    newComment.setId(id);
-                    return repository.save(newComment);
-                });
-    }
-
     @DeleteMapping("/comments/{id}")
     void deleteComment(@PathVariable int id) {
         repository.deleteById(id);

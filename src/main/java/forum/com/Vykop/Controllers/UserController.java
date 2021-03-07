@@ -111,13 +111,6 @@ class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/users/avatar")
-    public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file,
-                                           Principal principal) {
-        String fileURL = userService.uploadAvatar(file, principal);
-        return ResponseEntity.ok().body(fileURL);
-    }
-
     @PostMapping("/users")
     ResponseEntity newUser(@RequestBody @Valid User newUser, @RequestParam("file") MultipartFile avatar) {
         try {

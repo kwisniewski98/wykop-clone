@@ -51,19 +51,6 @@ class Sub_vykopController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
-    @PostMapping("/subykop/{id}/banner")
-    ResponseEntity changeBanner(@PathVariable int id, @RequestParam("file") MultipartFile file){
-        String response = subVykopService.uploadBanner(file, id);
-        if (response.equals("subVykop not found")) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        return ResponseEntity.ok().body(response);
-    }
-
-    @GetMapping("/sub_vykop")
-    List<SubVykop> all() {
-        return repository.findAll();
-    }
-
     @PostMapping("/sub_vykop")
     ResponseEntity newSub_vykop(@RequestParam("banner") MultipartFile banner, @RequestParam("avatar") MultipartFile avatar,
                                 @RequestParam("name") String name, @RequestParam("description") String description,
@@ -78,25 +65,6 @@ class Sub_vykopController {
         }
     }
 
-    @PutMapping("/sub_vykop/{id}")
-    SubVykop replaceSub_vykop(@RequestBody SubVykop newSub_vykop, @PathVariable int id) {
-        return repository.findById(id)
-                .map(Sub_vykop -> {
-                    Sub_vykop.setDescription(newSub_vykop.getDescription());
-                    Sub_vykop.setName(newSub_vykop.getName());
-                    Sub_vykop.setBanner(newSub_vykop.getBanner());
-                    return repository.save(Sub_vykop);
-                })
-                .orElseGet(() -> {
-                    newSub_vykop.setId(id);
-                    return repository.save(newSub_vykop);
-                });
-    }
-
-    @DeleteMapping("/sub_vykop/{id}")
-    void deleteSub_vykop(@PathVariable int id) {
-        repository.deleteById(id);
-    }
     @GetMapping("/sub_vykop/search")
     ResponseEntity findSubVykops(@RequestParam String match) {
         return ResponseEntity.ok().body(subVykopService.subVykopsMatching(match));

@@ -36,11 +36,6 @@ class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/posts")
-    List<Post> all() {
-        return repository.findAll();
-    }
-
     @PostMapping("/posts")
     ResponseEntity newPost(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("title") String title,
                  @RequestParam("text") String text, @RequestParam("subVykop") String subVykop, Principal principal) {
@@ -73,24 +68,6 @@ class PostController {
         return ResponseEntity.ok().body(commentService.createComment(text, postId, principal.getName()));
     }
 
-
-    @PutMapping("/posts/{id}")
-    Post replacePost(@RequestBody Post newPost, @PathVariable int id) {
-        return repository.findById(id)
-                .map(Post -> {
-                    Post.setAuthor(newPost.getAuthor());
-                    Post.setContent(newPost.getContent());
-                    Post.setCreationDate(newPost.getCreationDate());
-                    Post.setSubVykop(newPost.getSubVykop());
-                    Post.setVotes(newPost.getVotes());
-                    return repository.save(Post);
-                })
-                .orElseGet(() -> {
-                    newPost.setId(id);
-                    return repository.save(newPost);
-                });
-    }
-
     @PostMapping("/posts/upvote/{id}")
     ResponseEntity upvote(@PathVariable int id, Principal principal) {
         String result = postService.upvote(id, principal);
@@ -104,10 +81,6 @@ class PostController {
         else return ResponseEntity.ok().body(postService.postWithCommentUpvoted(post.get(), principal.getName()));
     }
 
-    @DeleteMapping("/posts/{id}")
-    void deletePost(@PathVariable int id) {
-        repository.deleteById(id);
-    }
     @GetMapping("/posts/{subVykop}/search")
     ResponseEntity findSubVykops(@RequestBody String match, @PathVariable String subVykop) {
         return ResponseEntity.ok().body(postService.postsMatching(match, subVykop));
