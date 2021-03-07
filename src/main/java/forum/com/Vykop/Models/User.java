@@ -16,9 +16,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String username;
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private String email;
     private Date registrationDate;
+    @JsonIgnore
     private String role;
     private String avatar;
 

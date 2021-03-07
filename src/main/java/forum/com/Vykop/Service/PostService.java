@@ -2,6 +2,7 @@ package forum.com.Vykop.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import forum.com.Vykop.Config.IgnoreHibernatePropertiesInJackson;
 import forum.com.Vykop.Models.*;
 import forum.com.Vykop.Repositories.*;
 import forum.com.Vykop.Storage.StorageService;
@@ -37,13 +38,6 @@ public class PostService {
     @Qualifier("pgsqlJdbcTemplateNamed")
     private NamedParameterJdbcTemplate pgsqlTemplateNamed;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Qualifier("commentRepository")
-    @Autowired
-    private CommentRepository commentRepository;
-
     @Qualifier("contentRepository")
     @Autowired
     private ContentRepository contentRepository;
@@ -62,15 +56,7 @@ public class PostService {
     @Autowired
     private Sub_vykopRepository sub_vykopRepository;
 
-    @Autowired
-    private CommentService commentService;
 
-
-
-    @PostConstruct
-    public void init(){
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-    }
 
     public List<Post> getPostbyUser(User user) {
         final String CHECK_POST = "SELECT * FROM post WHERE author = :user_id";
