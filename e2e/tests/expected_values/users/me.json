@@ -1,8 +1,6 @@
 {
-    "id": "1",
+    "id": 1,
     "username": "admin",
-    "password": "password",
-    "email" : "admin@test.com",
     "registrationDate": "2000-01-01",
     "avatar": "http://dummyimage.com/230x198.png/cc0000/ffffff"
 }

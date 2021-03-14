@@ -1,6 +1,7 @@
 package forum.com.Vykop.Service;
 
 import forum.com.Vykop.Models.User;
+import forum.com.Vykop.Models.UserCreateForm;
 import forum.com.Vykop.Models.UserRegisterForm;
 import forum.com.Vykop.Repositories.UserRepository;
 import forum.com.Vykop.Storage.StorageService;
@@ -46,7 +47,7 @@ public class UserService {
         return "ok";
     }
 
-    public User createUser(User new_user, MultipartFile avatar) {
+    public User createUser(UserCreateForm new_user) {
         if (userRepository.findByUsername(new_user.getUsername()) != null ) throw new EntityExistsException();
         if (userRepository.findByEmail(new_user.getEmail()) != null) throw new EntityExistsException();
         User user = new User(0,
@@ -55,9 +56,7 @@ public class UserService {
                 new_user.getEmail(),
                 new Date(System.currentTimeMillis()),
                 new_user.getRole());
-        storageService.store(avatar);
-        user.setAvatar("http://localhost:8080/files/" + avatar.getOriginalFilename());
-        return userRepository.saveAndFlush(user);
+       return userRepository.saveAndFlush(user);
     }
 
     public String uploadAvatar(MultipartFile file, Principal principal){

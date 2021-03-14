@@ -1,6 +1,8 @@
 {
-    "id": 2,
-    "username": "user2",
-    "registrationDate": "2020-01-01",
+    "id": "2",
+    "username": "user1",
+    "password": "!Password234",
+    "email": "user1@test.com",
+    "registrationDate": "2010-08-01",
     "avatar": "http://dummyimage.com/122x168.jpg/dddddd/000000"
 }

@@ -22,20 +22,18 @@ def test_users_get_all(authorization):
     assert res.ok and res.json() == expected
 
 
-#TODO Sprawdzic czy test jest potrzebny
-#
-# def test_users_new_user(authorization):
-#     payload = {
-#         "username": "in",
-#         "password": "esse in culpa ad",
-#         "email": "ut aute in esse",
-#         "role": "ullamco consequat laborum et consectetur",
-#     }
-#     res = requests.post(f"{VYKOP_URL}/users", data=payload, headers={"Authorization": authorization})
-#     assert res.ok
-#     res = requests.get(f"{VYKOP_URL}/users", headers={"Authorization": authorization})
-#
-#     assert res.ok and len(res.json()) == 4
+def test_users_new_user(authorization):
+    payload = {
+        "username": "dasdsadsa",
+        "password": "!Password123",
+        "email": "dasdsadsa@test.com",
+        "role": "user",
+    }
+    res = requests.post(f"{VYKOP_URL}/users", json=payload, headers={"Authorization": authorization})
+    assert res.ok
+    res = requests.get(f"{VYKOP_URL}/users", headers={"Authorization": authorization})
+
+    assert res.ok and len(res.json()) == 4
 
 def test_user_register(authorization):
     body = {
@@ -48,16 +46,16 @@ def test_user_register(authorization):
 
     res = requests.get(f"{VYKOP_URL}/users", headers={"Authorization": authorization})
 
-    assert res.ok and len(res.json()) == 4
+    assert res.ok and len(res.json()) == 5
 
-# def test_user_register_same_username():
-#     body = {
-#         "email": "test@test.com",
-#         "username": "user3",
-#         "password": "!Password123"
-#     }
-#     resp = requests.post(f"{VYKOP_URL}/users/signup", json=body)
-#     assert resp.status_code != 200
+def test_user_register_same_username():
+    body = {
+        "email": "test@test.com",
+        "username": "user3",
+        "password": "!Password123"
+    }
+    resp = requests.post(f"{VYKOP_URL}/users/signup", json=body)
+    assert resp.status_code != 200
 
 
 def test_user_login():
@@ -87,10 +85,9 @@ def test_user_posts(authorization):
 
 
 def test_users_me(authorization):
-    user_id = 1
     res = requests.get(f"{VYKOP_URL}/users/me", headers={"Authorization": authorization})
     assert res.ok
-    with open(f"expected_values/users/user_{user_id}.json") as f:
+    with open(f"expected_values/users/me.json") as f:
         expected = json.load(f)
     assert res.json() == expected
 
@@ -98,15 +95,19 @@ def test_users_me(authorization):
 def test_user_by_username(authorization):
     res = requests.get(f"{VYKOP_URL}/u/admin", headers={"Authorization": authorization})
     assert res.ok
-    with open(f"expected_values/users/user_1.json") as f:
+    with open(f"expected_values/users/me.json") as f:
         expected = json.load(f)
     assert res.json() == expected
 
 
 def test_users_replace_user(authorization):
     user_id = 2
-    res = requests.put(f"{VYKOP_URL}/users/{user_id}?username=user2&password=!Password123&email=test@test.com"
-                       f"&registrationDate=2020-01-01&role=user", headers={"Authorization": authorization})
+    data = {
+        "password": "!Password234",
+        "email" : "changed@test.com",
+        "role" : "user"
+    }
+    res = requests.put(f"{VYKOP_URL}/users/{user_id}",json=data, headers={"Authorization": authorization})
     assert res.ok
     res = requests.get(f"{VYKOP_URL}/users/{user_id}", headers={"Authorization": authorization})
     with open(f"expected_values/users/user_{user_id}.json") as f:
@@ -120,6 +121,6 @@ def test_users_delete_user(authorization):
     assert res.ok
     res = requests.get(f"{VYKOP_URL}/users", headers={"Authorization": authorization})
 
-    assert res.ok and len(res.json()) == 3
+    assert res.ok and len(res.json()) == 4
 
 

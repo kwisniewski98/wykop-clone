@@ -1,8 +1,6 @@
 package forum.com.Vykop.Controllers;
 
-import forum.com.Vykop.Models.User;
-import forum.com.Vykop.Models.UserForm;
-import forum.com.Vykop.Models.UserRegisterForm;
+import forum.com.Vykop.Models.*;
 import forum.com.Vykop.Repositories.CommentRepository;
 import forum.com.Vykop.Repositories.PostRepository;
 import forum.com.Vykop.Repositories.UserRepository;
@@ -26,6 +24,7 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -80,8 +79,21 @@ class UserController {
     }
 
     @GetMapping("/users/{id}")
-    User byId(@PathVariable int id) {
-        return repository.findById(id).orElse(null);
+    ResponseEntity byId(@PathVariable int id) {
+        HashMap<String, String> userMap = new HashMap<String , String >();
+        Optional<User> userO = repository.findById(id);
+        if (!userO.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        User user = userO.get();
+        userMap.put("id", String.valueOf(user.getId()));
+        userMap.put("username", user.getUsername());
+        userMap.put("password", user.getPassword());
+        userMap.put("email", user.getEmail());
+        userMap.put("registrationDate", user.getRegistrationDate().toString());
+        userMap.put("avatar", user.getAvatar());
+
+        return ResponseEntity.ok().body(userMap);
     }
 
     @GetMapping("/users")
@@ -114,36 +126,33 @@ class UserController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(resp);
     }
 
-    //TODO: Sprawdzic czy endpoint jest potrzebny
     @PostMapping("/users")
-    ResponseEntity newUser(@RequestBody @Valid User newUser, @RequestParam("file") MultipartFile avatar) {
+    ResponseEntity newUser(@RequestBody UserCreateForm newUser) {
         try {
-            return ResponseEntity.ok().body(userService.createUser(newUser, avatar));
+            return ResponseEntity.ok().body(userService.createUser(newUser));
         } catch (EntityExistsException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    @PutMapping("/users/avatar")
+    ResponseEntity setAvatar(@RequestParam("file") MultipartFile file, Principal principal) {
+        userService.uploadAvatar(file, principal);
+        return ResponseEntity.ok().build();
+    }
 
     @PutMapping("/users/{id}")
-    User replaceUser(@RequestParam("username") String username, @RequestParam("password") String password,
-                     @RequestParam("email") String email, @RequestParam("registrationDate") Date registrationDate,
-                     @RequestParam(value = "role", required = false) String role, @RequestParam(value = "file", required = false) MultipartFile file,
-                     @PathVariable int id) {
-        if(file != null)
-        storageService.store(file);
-        return repository.findById(id)
-                .map(user -> {
-                    user.setUsername(username);
-                    user.setPassword(password);
-                    user.setRegistrationDate(registrationDate);
-                    if(role != null)
-                    user.setRole(role);
-                    if(file != null)
-                    user.setAvatar("http://localhost:8080/files/" + file.getOriginalFilename());
-                    return repository.save(user);
-                })
-                .orElseGet(() -> repository.save(new User(id, username, password, email, registrationDate, role,
-                        "http://localhost:8080/files/" + file.getOriginalFilename() )));
+    ResponseEntity replaceUser(@RequestBody UserEdit userEdit, @PathVariable int id) {
+        Optional<User> user = repository.findById(id);
+        if (!user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok().body(repository.findById(id)
+                .map(u -> {
+                    u.setPassword(userEdit.getPassword());
+                    if(userEdit.getRole() != null)
+                        u.setRole(userEdit.getRole());
+                    return repository.save(u);
+                }));
     }
 
     @GetMapping("u/{name}")
