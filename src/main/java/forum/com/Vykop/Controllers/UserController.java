@@ -107,8 +107,11 @@ class UserController {
 
     @RequestMapping(value = "/users/signup", method = {RequestMethod.POST})
     public ResponseEntity register(@RequestBody @Valid UserRegisterForm userForm) {
-        userService.registerUser(userForm);
-        return ResponseEntity.ok().build();
+        String resp = userService.registerUser(userForm);
+        if (resp.equals("ok")) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(resp);
     }
 
     //TODO: Sprawdzic czy endpoint jest potrzebny
