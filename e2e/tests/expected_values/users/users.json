@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "username": "admin",
+        "registrationDate": "2000-01-01",
+        "avatar": "http://dummyimage.com/230x198.png/cc0000/ffffff"
+    },
+    {
+        "id": 2,
+        "username": "user1",
+        "registrationDate": "2010-08-01",
+        "avatar": "http://dummyimage.com/122x168.jpg/dddddd/000000"
+    },
+    {
+        "id": 3,
+        "username": "user2",
+        "registrationDate": "2019-05-12",
+        "avatar": "http://dummyimage.com/118x177.bmp/ff4444/ffffff"
+    }
+]

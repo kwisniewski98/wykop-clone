@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Embeddable
 public class UpvotedList {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "user_id")
     private Integer userId;

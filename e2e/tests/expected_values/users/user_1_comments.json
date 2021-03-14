@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "text": "some text",
+        "votes": 0,
+        "author": {
+            "id": 1,
+            "username": "admin",
+            "registrationDate": "2000-01-01",
+            "avatar": "http://dummyimage.com/230x198.png/cc0000/ffffff"
+        },
+        "upvoted": false
+    }
+]

@@ -13,7 +13,7 @@ import java.util.Set;
 public class User {
     private static ArrayList<String> roles = new ArrayList<>(Arrays.asList(new String[]{"user", "admin"}));
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String username;
     @JsonIgnore

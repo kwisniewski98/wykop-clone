@@ -111,6 +111,7 @@ class UserController {
         return ResponseEntity.ok().build();
     }
 
+    //TODO: Sprawdzic czy endpoint jest potrzebny
     @PostMapping("/users")
     ResponseEntity newUser(@RequestBody @Valid User newUser, @RequestParam("file") MultipartFile avatar) {
         try {

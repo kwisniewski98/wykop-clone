@@ -1,0 +1,27 @@
+{
+    "id": 1,
+    "author": {
+        "id": 1,
+        "username": "admin",
+        "registrationDate": "2000-01-01",
+        "avatar": "http://dummyimage.com/230x198.png/cc0000/ffffff"
+    },
+    "votes": 0,
+    "title": "Test",
+    "content": {
+        "id": 1,
+        "text": "Only text",
+        "image": null,
+        "video": null
+    },
+    "creationDate": "2020-01-01",
+    "subVykop": {
+        "id": 1,
+        "name": "Some subvykop",
+        "description": "description",
+        "banner": "http://clipart-library.com/newimages/clip-art-banner-7.png",
+        "avatar": "http://dummyimage.com/175x144.jpg/ff4444/ffffff"
+    },
+    "comments": [],
+    "upvoted": false
+}

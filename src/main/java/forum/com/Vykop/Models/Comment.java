@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "comment")
 public class Comment implements Comparable{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne(fetch = FetchType.LAZY,  cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "post")

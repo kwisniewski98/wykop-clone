@@ -33,3 +33,7 @@ build/
 .vscode/
 
 upload-dir/
+out/
+.cache/
+e2e/tests/.pytest_cache/
+e2e/tests/__pycache__/

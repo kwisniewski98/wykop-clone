@@ -1,0 +1,108 @@
+[
+    {
+        "id": 1,
+        "author": {
+            "id": 1,
+            "username": "admin",
+            "password": "password",
+            "email": "admin@test.com",
+            "registrationDate": "2000-01-01",
+            "role": "admin",
+            "avatar": "http://dummyimage.com/230x198.png/cc0000/ffffff"
+        },
+        "votes": 0,
+        "title": "Test",
+        "content": {
+            "id": 1,
+            "text": "Only text",
+            "image": null,
+            "video": null
+        },
+        "creationDate": "2020-01-01",
+        "subVykop": {
+            "id": 1,
+            "name": "Some subvykop",
+            "description": "description",
+            "banner": "http://clipart-library.com/newimages/clip-art-banner-7.png",
+            "avatar": "http://dummyimage.com/175x144.jpg/ff4444/ffffff"
+        },
+        "comments": [
+            {
+                "id": 1,
+                "text": "some text",
+                "votes": 0,
+                "author": {
+                    "id": 1,
+                    "username": "admin",
+                    "password": "password",
+                    "email": "admin@test.com",
+                    "registrationDate": "2000-01-01",
+                    "role": "admin",
+                    "avatar": "http://dummyimage.com/230x198.png/cc0000/ffffff"
+                },
+                "upvoted": false
+            }
+        ],
+        "upvoted": false
+    },
+    {
+        "id": 2,
+        "author": {
+            "id": 2,
+            "username": "user1",
+            "password": "otherPassword",
+            "email": "user1@test.com",
+            "registrationDate": "2010-08-01",
+            "role": "user",
+            "avatar": "http://dummyimage.com/122x168.jpg/dddddd/000000"
+        },
+        "votes": 0,
+        "title": "Kolejny",
+        "content": {
+            "id": 2,
+            "text": "Text with img",
+            "image": "https://marketingprzykawie.pl/wp-content/uploads/2019/08/pepe-the-frog_large.jpg",
+            "video": null
+        },
+        "creationDate": "2020-01-01",
+        "subVykop": {
+            "id": 1,
+            "name": "Some subvykop",
+            "description": "description",
+            "banner": "http://clipart-library.com/newimages/clip-art-banner-7.png",
+            "avatar": "http://dummyimage.com/175x144.jpg/ff4444/ffffff"
+        },
+        "comments": [],
+        "upvoted": false
+    },
+    {
+        "id": 3,
+        "author": {
+            "id": 3,
+            "username": "user2",
+            "password": "nextPassword",
+            "email": "user2@test.com",
+            "registrationDate": "2019-05-12",
+            "role": "user",
+            "avatar": "http://dummyimage.com/118x177.bmp/ff4444/ffffff"
+        },
+        "votes": 0,
+        "title": "Kolejny test",
+        "content": {
+            "id": 3,
+            "text": "Text with video",
+            "image": null,
+            "video": "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&fs=1&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0"
+        },
+        "creationDate": "2020-01-01",
+        "subVykop": {
+            "id": 1,
+            "name": "Some subvykop",
+            "description": "description",
+            "banner": "http://clipart-library.com/newimages/clip-art-banner-7.png",
+            "avatar": "http://dummyimage.com/175x144.jpg/ff4444/ffffff"
+        },
+        "comments": [],
+        "upvoted": false
+    }
+]

@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Embeddable
 public class AdminList {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "sub_vykop")
     private Integer subVykop;
